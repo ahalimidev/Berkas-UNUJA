@@ -1,0 +1,39 @@
+/* Typeface reset */
+body {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+ }
+
+ /* Browser form style reset */
+ input:focus,
+ textarea:focus,
+ select:focus{
+    outline: none;
+ }
+
+ /* Background style */
+ .bg-semantic,
+ .hover-bg-semantic:hover {
+    background: #044fa0;
+ }
+
+ /* Line clamp style */
+ .line-clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+ }
+
+ /* Custom Owl carousel card slider */
+ .owl-carousel .owl-stage {
+    display: flex;
+ }
+
+ .item-box {
+    display: flex;
+    flex: 1 0 auto;
+    height: 100%;
+    width: 100%;
+ }
