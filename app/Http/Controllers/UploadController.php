@@ -4,16 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\berkas;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
 class UploadController extends Controller
 {
     public function index(Request $req)
     {
+
+        if (Auth::guard('web')->check()) {
+            if (Auth::user('web')->status == "viewer") {
+                return redirect()->route('dashboard.index');
+            }
+        } else {
+            return redirect()->route('dashboard.index');
+        }
+
         $all = DB::select("SELECT berkas.*,
         master_lembaga.id_lembaga, master_lembaga.nama_lembaga,
         master_fakultas.id_fakultas, master_fakultas.nama_fakultas,
@@ -39,11 +46,27 @@ class UploadController extends Controller
 
     public function create()
     {
+        if (Auth::guard('web')->check()) {
+            if (Auth::user('web')->status == "viewer") {
+                return redirect()->route('dashboard.index');
+            }
+        } else {
+            return redirect()->route('dashboard.index');
+        }
+
         return view('upload.create');
     }
 
     public function store(Request $request)
     {
+        if (Auth::guard('web')->check()) {
+            if (Auth::user('web')->status == "viewer") {
+                return redirect()->route('dashboard.index');
+            }
+        } else {
+            return redirect()->route('dashboard.index');
+        }
+
         $extension = $request->file('berkas')->getClientOriginalExtension();
         $fileName = $this->quickRandom(26) . '.' . $extension;
         $request->file('berkas')->move('berkas', $fileName);
@@ -62,6 +85,14 @@ class UploadController extends Controller
 
     public function show($id)
     {
+        if (Auth::guard('web')->check()) {
+            if (Auth::user('web')->status == "viewer") {
+                return redirect()->route('dashboard.index');
+            }
+        } else {
+            return redirect()->route('dashboard.index');
+        }
+
         $one = DB::selectOne("SELECT berkas.*,
         master_lembaga.id_lembaga, master_lembaga.nama_lembaga,
         master_fakultas.id_fakultas, master_fakultas.nama_fakultas,
@@ -79,12 +110,28 @@ class UploadController extends Controller
     }
     public function edit($id)
     {
+        if (Auth::guard('web')->check()) {
+            if (Auth::user('web')->status == "viewer") {
+                return redirect()->route('dashboard.index');
+            }
+        } else {
+            return redirect()->route('dashboard.index');
+        }
+
         $one = berkas::where('id_berkas', $id)->first();
         return view('upload.edit', compact('one', 'id'));
     }
 
     public function update(Request $request, $id)
     {
+        if (Auth::guard('web')->check()) {
+            if (Auth::user('web')->status == "viewer") {
+                return redirect()->route('dashboard.index');
+            }
+        } else {
+            return redirect()->route('dashboard.index');
+        }
+
         $one = berkas::where('id_berkas', $id)->first();
         if ($request->hasFile('foto')) {
             if ($one->berkas != null) {
@@ -125,6 +172,14 @@ class UploadController extends Controller
     }
     public function destroy($id)
     {
+        if (Auth::guard('web')->check()) {
+            if (Auth::user('web')->status == "viewer") {
+                return redirect()->route('dashboard.index');
+            }
+        } else {
+            return redirect()->route('dashboard.index');
+        }
+
         $x = berkas::where('id_berkas', $id)->first();
         return $x->delete();
     }
@@ -134,85 +189,5 @@ class UploadController extends Controller
         $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
         return substr(str_shuffle(str_repeat($pool, 5)), 0, $length);
-    }
-
-    public function download(Request $req)
-    {
-        $pencarian = $req->query('q');
-        $id_kategori_berkas = $req->query('id_kategori_berkas');
-        $id_sub_berkas = $req->query('id_sub_berkas');
-        $pilih_kategori = $req->query('pilih_kategori');
-        $id_lembaga = $req->query('id_lembaga');
-        $id_fakultas = $req->query('id_fakultas');
-        $id_prodi = $req->query('id_prodi');
-        $login = $req->session()->get('Login');
-
-        $kategori_berkas = $id_kategori_berkas == null ? "" : " AND berkas.id_kategori_berkas = '$id_kategori_berkas' ";
-        $sub_berkas = $id_sub_berkas == null ? "" : " AND berkas.id_sub_berkas = '$id_sub_berkas' ";
-        if ($pilih_kategori == null || $pilih_kategori == "" || $pilih_kategori == 0) {
-            $lembaga = "";
-            $fakultas = "";
-            $prodi = "";
-        } else if ($pilih_kategori == 1) {
-            $lembaga = $id_kategori_berkas == null ? "AND berkas.id_fakultas IS NOT NULL " : " AND berkas.id_lembaga = '$id_lembaga' ";
-            $fakultas = "";
-            $prodi = "";
-        } else if ($pilih_kategori == 2) {
-            $fakultas = $id_fakultas == null ? "AND berkas.id_fakultas IS NOT NULL " : " AND berkas.id_fakultas = '$id_fakultas' ";
-            $prodi = $id_prodi == null ? "" : " AND berkas.id_prodi = '$id_prodi' ";
-            $lembaga = "";
-        } else {
-            $lembaga = "";
-            $fakultas = "";
-            $prodi = "";
-        }
-        if($pencarian == 'pencarian'){
-            $all = DB::select("SELECT berkas.nama_berkas,berkas.berkas,berkas.keterangan_berkas,berkas.status_berkas,master_lembaga.nama_lembaga, master_fakultas.nama_fakultas, master_prodi.program_studi FROM berkas
-            LEFT JOIN master_lembaga on master_lembaga.id_lembaga = berkas.id_lembaga
-            LEFT JOIN master_fakultas on master_fakultas.id_fakultas = berkas.id_fakultas
-            LEFT JOIN master_prodi on master_prodi.prodi_id = berkas.id_prodi where berkas.berkas is not null $kategori_berkas $sub_berkas $lembaga $fakultas $prodi");
-            if ($req->ajax()) {
-                return DataTables::of($all)
-                    ->addIndexColumn()
-                    ->editColumn('nama_berkas', function ($model) {
-                        return $model->nama_berkas . '#_#' . $model->berkas . '#_#' . $model->keterangan_berkas . '#_#' . $model->status_berkas;
-                    })
-                    ->addColumn('lembaga', function ($model) {
-                        return $model->nama_lembaga . '#_#' . $model->nama_fakultas . '#_#' . $model->program_studi;
-                    })
-                    ->addColumn('action', function ($model) {
-                        return $model->berkas . '#_#' . $model->status_berkas;
-                    })
-                    ->make(true);
-            }
-        }
-
-        return view('upload.download', compact('login'));
-    }
-    public function file($data)
-    {
-        $path = public_path("../berkas/") . $data;
-        if (!File::exists($path)) {
-            abort(404);
-        }
-        $file = File::get($path);
-        $type = File::mimeType($path);
-        $response = response()->make($file, 200);
-        $response->header("Content-Type", $type);
-        return $response;
-    }
-
-    public function show_pdf($data)
-    {
-        $path = public_path("../berkas/") . $data;
-        if (!File::exists($path)) {
-            abort(404);
-        }
-        $header = [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="' . $data . '"'
-          ];
-         return response()->file($path, $header);
-
     }
 }

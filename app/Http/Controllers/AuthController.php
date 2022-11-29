@@ -2,18 +2,23 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\DataTables;
 
 class AuthController extends Controller
 {
     public function index(Request $req)
     {
+         if(Auth::guard('web')->check()){
+            if(Auth::user('web')->status == "viewer"){
+                return redirect()->route('dashboard.index');
+            }
+       }else{
+         return redirect()->route('dashboard.index');
+       }
         $all = DB::select("SELECT user.id_user, user.nama, user.username, user.status, master_lembaga.nama_lembaga, master_fakultas.nama_fakultas FROM user
         LEFT JOIN master_lembaga on master_lembaga.id_lembaga = user.id_lembaga
         LEFT JOIN master_fakultas on master_fakultas.id_fakultas = user.id_fakultas");
@@ -33,11 +38,25 @@ class AuthController extends Controller
 
     public function create()
     {
+         if(Auth::guard('web')->check()){
+            if(Auth::user('web')->status == "viewer"){
+                return redirect()->route('dashboard.index');
+            }
+       }else{
+         return redirect()->route('dashboard.index');
+       }
         return view('auth.create');
     }
 
     public function store(Request $request)
     {
+         if(Auth::guard('web')->check()){
+            if(Auth::user('web')->status == "viewer"){
+                return redirect()->route('dashboard.index');
+            }
+       }else{
+         return redirect()->route('dashboard.index');
+       }
         $x = User::where('username',$request->username)->first();
         if($x != null){
             return Redirect()->route('auth.create')->withInput()->with('error', 'Esername '.$request->username.' sudah ada');
@@ -51,6 +70,13 @@ class AuthController extends Controller
 
     public function show($id)
     {
+         if(Auth::guard('web')->check()){
+            if(Auth::user('web')->status == "viewer"){
+                return redirect()->route('dashboard.index');
+            }
+       }else{
+         return redirect()->route('dashboard.index');
+       }
         $one = DB::selectOne("SELECT user.*, master_lembaga.nama_lembaga, master_fakultas.nama_fakultas FROM user
         LEFT JOIN master_lembaga on master_lembaga.id_lembaga = user.id_lembaga
         LEFT JOIN master_fakultas on master_fakultas.id_fakultas = user.id_fakultas
@@ -59,12 +85,26 @@ class AuthController extends Controller
     }
     public function edit($id)
     {
+         if(Auth::guard('web')->check()){
+            if(Auth::user('web')->status == "viewer"){
+                return redirect()->route('dashboard.index');
+            }
+       }else{
+         return redirect()->route('dashboard.index');
+       }
         $one = User::where('id_user', $id)->first();
         return view('auth.edit',compact('one','id'));
     }
 
     public function update(Request $request, $id)
     {
+         if(Auth::guard('web')->check()){
+            if(Auth::user('web')->status == "viewer"){
+                return redirect()->route('dashboard.index');
+            }
+       }else{
+         return redirect()->route('dashboard.index');
+       }
         $y = User::where('id_user',$id)->first();
         $x = User::where('username',$request->username)->first();
         if($x->username != $y->username){
@@ -93,34 +133,14 @@ class AuthController extends Controller
     }
     public function destroy($id)
     {
+         if(Auth::guard('web')->check()){
+            if(Auth::user('web')->status == "viewer"){
+                return redirect()->route('dashboard.index');
+            }
+       }else{
+         return redirect()->route('dashboard.index');
+       }
         $x = User::where('id_user', $id)->first();
         return $x->delete();
-    }
-
-    public function login(){
-        return view('login');
-    }
-    public function login_login(Request $request){
-        $username = $request->username;
-        $password = $request->password;
-        $login = User::where('username',$username)->first();
-        if($login != null){
-            if (Hash::check($password, $login->password)) {
-                if (Auth::guard('web')->attempt(['username' => $username, 'password' => $password])) {
-                    return redirect()->intended(url("/"));
-                }
-            }else{
-                return Redirect()->route('auth.login')->withInput()->with('error', 'Email dan Password salah');
-
-            }
-        }else{
-            return Redirect()->route('auth.login')->withInput()->with('error', 'Email dan Password salah');
-
-        }
-    }
-    public function logout(){
-        Auth::guard("web")->logout();
-        session()->flush();
-        return redirect()->route('dashboard.index');
     }
 }

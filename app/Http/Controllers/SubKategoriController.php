@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\berkas;
 use App\Models\kategori_berkas;
 use App\Models\sub_berkas;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 
@@ -13,6 +13,14 @@ class SubKategoriController extends Controller
 {
     public function index(Request $req)
     {
+         if(Auth::guard('web')->check()){
+            if(Auth::user('web')->status == "viewer"){
+                return redirect()->route('dashboard.index');
+            }
+       }else{
+         return redirect()->route('dashboard.index');
+       }
+
         $all = DB::select("SELECT kategori_berkas.nama_kategori_berkas,sub_berkas.*
         FROM sub_berkas
         LEFT JOIN kategori_berkas on kategori_berkas.id_kategori_berkas = sub_berkas.id_kategori_berkas");
@@ -30,12 +38,26 @@ class SubKategoriController extends Controller
 
     public function create()
     {
+         if(Auth::guard('web')->check()){
+            if(Auth::user('web')->status == "viewer"){
+                return redirect()->route('dashboard.index');
+            }
+       }else{
+         return redirect()->route('dashboard.index');
+       }
         $kategori_berkas = kategori_berkas::all();
         return view('sub_kategori.create',compact('kategori_berkas'));
     }
 
     public function store(Request $request)
     {
+         if(Auth::guard('web')->check()){
+            if(Auth::user('web')->status == "viewer"){
+                return redirect()->route('dashboard.index');
+            }
+       }else{
+         return redirect()->route('dashboard.index');
+       }
         $save = $request->all();
         unset($save['_token']);
         sub_berkas::updateOrCreate($save, $save);
@@ -44,6 +66,14 @@ class SubKategoriController extends Controller
 
     public function show($id)
     {
+         if(Auth::guard('web')->check()){
+            if(Auth::user('web')->status == "viewer"){
+                return redirect()->route('dashboard.index');
+            }
+       }else{
+         return redirect()->route('dashboard.index');
+       }
+
         $one = DB::selectOne("SELECT kategori_berkas.nama_kategori_berkas,sub_berkas.*
         FROM sub_berkas
         LEFT JOIN kategori_berkas on kategori_berkas.id_kategori_berkas = sub_berkas.id_kategori_berkas
@@ -53,6 +83,14 @@ class SubKategoriController extends Controller
     }
     public function edit($id)
     {
+         if(Auth::guard('web')->check()){
+            if(Auth::user('web')->status == "viewer"){
+                return redirect()->route('dashboard.index');
+            }
+       }else{
+         return redirect()->route('dashboard.index');
+       }
+
         $kategori_berkas = kategori_berkas::all();
         $one = sub_berkas::where('id_sub_berkas',$id)->first();
         return view('sub_kategori.edit',compact('one','id','kategori_berkas'));
@@ -60,6 +98,14 @@ class SubKategoriController extends Controller
 
     public function update(Request $request, $id)
     {
+         if(Auth::guard('web')->check()){
+            if(Auth::user('web')->status == "viewer"){
+                return redirect()->route('dashboard.index');
+            }
+       }else{
+         return redirect()->route('dashboard.index');
+       }
+
         $save = $request->all();
         unset($save['_token']);
         sub_berkas::updateOrCreate(['id_sub_berkas' => $id], $save);

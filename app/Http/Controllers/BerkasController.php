@@ -12,6 +12,14 @@ class BerkasController extends Controller
 {
     public function index(Request $req)
     {
+         if(Auth::guard('web')->check()){
+            if(Auth::user('web')->status == "viewer"){
+                return redirect()->route('dashboard.index');
+            }
+       }else{
+         return redirect()->route('dashboard.index');
+       }
+
         $x = Auth::user('web')->id_lembaga;
         $y = Auth::user('web')->id_fakultas;
         $id_lembaga = Auth::user('web')->id_lembaga == null ? '' :  "where berkas.id_lembaga = '$x' ";
@@ -42,6 +50,14 @@ class BerkasController extends Controller
 
     public function create()
     {
+         if(Auth::guard('web')->check()){
+            if(Auth::user('web')->status == "viewer"){
+                return redirect()->route('dashboard.index');
+            }
+       }else{
+         return redirect()->route('dashboard.index');
+       }
+
         $id_fakultas = Auth::user('web')->id_fakultas;
 
         return view('berkas.create',compact('id_fakultas'));
@@ -49,6 +65,14 @@ class BerkasController extends Controller
 
     public function store(Request $request)
     {
+         if(Auth::guard('web')->check()){
+            if(Auth::user('web')->status == "viewer"){
+                return redirect()->route('dashboard.index');
+            }
+       }else{
+         return redirect()->route('dashboard.index');
+       }
+
         $x = Auth::user('web')->id_lembaga;
         $y = Auth::user('web')->id_fakultas;
         $nama = Auth::user('web')->nama;
@@ -80,6 +104,14 @@ class BerkasController extends Controller
 
     public function show($id)
     {
+         if(Auth::guard('web')->check()){
+            if(Auth::user('web')->status == "viewer"){
+                return redirect()->route('dashboard.index');
+            }
+       }else{
+         return redirect()->route('dashboard.index');
+       }
+
         $one = DB::selectOne("SELECT berkas.*,
         master_lembaga.id_lembaga, master_lembaga.nama_lembaga,
         master_fakultas.id_fakultas, master_fakultas.nama_fakultas,
@@ -97,6 +129,14 @@ class BerkasController extends Controller
     }
     public function edit($id)
     {
+         if(Auth::guard('web')->check()){
+            if(Auth::user('web')->status == "viewer"){
+                return redirect()->route('dashboard.index');
+            }
+       }else{
+         return redirect()->route('dashboard.index');
+       }
+
         $id_fakultas = Auth::user('web')->id_fakultas;
 
         $one = berkas::where('id_berkas', $id)->first();
@@ -105,6 +145,14 @@ class BerkasController extends Controller
 
     public function update(Request $request, $id)
     {
+         if(Auth::guard('web')->check()){
+            if(Auth::user('web')->status == "viewer"){
+                return redirect()->route('dashboard.index');
+            }
+       }else{
+         return redirect()->route('dashboard.index');
+       }
+
         $x = Auth::user('web')->id_lembaga;
         $y = Auth::user('web')->id_fakultas;
         $nama = Auth::user('web')->nama;
@@ -169,6 +217,14 @@ class BerkasController extends Controller
     }
     public function destroy($id)
     {
+         if(Auth::guard('web')->check()){
+            if(Auth::user('web')->status == "viewer"){
+                return redirect()->route('dashboard.index');
+            }
+       }else{
+         return redirect()->route('dashboard.index');
+       }
+
         $x = berkas::where('id_berkas', $id)->first();
         return $x->delete();
     }

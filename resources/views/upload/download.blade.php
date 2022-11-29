@@ -156,7 +156,7 @@
 
         var download = '{{ route('berkas_file', [':upload']) }}'
         var show = '{{ route('show_file', [':upload']) }}'
-        var auth_login = '{{ route('auth.index') }}'
+        var auth_login = '{{ route('auth.login') }}'
         $(document).ready(function() {
             $.fn.dataTable.ext.errMode = 'none';
 
