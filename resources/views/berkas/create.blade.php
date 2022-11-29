@@ -17,7 +17,7 @@
                 </h3>
 
             </div>
-            <form action="{{ route('upload.store') }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('upload_berkas.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
 
                 <div class="card-body">
@@ -25,7 +25,7 @@
                     <div class="row justify-content-md-center">
                         <div class="align-content-center">
                             <div class="row">
-                                <div class="flex-column mb-8 fv-row col-sm-4" >
+                                <div class="flex-column mb-8 fv-row col-sm-6" >
                                     <!--begin::Label-->
                                     <label class="d-flex align-items-center fs-6 fw-bold mb-2 required">
                                         <span>Kategori Berkas</span>
@@ -37,7 +37,7 @@
                                     </select>
 
                                 </div>
-                                <div class="flex-column mb-8 fv-row col-sm-4">
+                                <div class="flex-column mb-8 fv-row col-sm-6">
                                     <!--begin::Label-->
                                     <label class="d-flex align-items-center fs-6 fw-bold mb-2 required">
                                         <span>Sub Kategori Berkas</span>
@@ -49,44 +49,6 @@
                                     </select>
 
                                 </div>
-                                <div class="d-flex flex-column mb-8 fv-row col-sm-4">
-                                    <!--begin::Label-->
-                                    <label class="d-flex align-items-center fs-6 fw-bold mb-2 required">
-                                        <span>Lembaga / Fakultas</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <select class="selectpicker form-control form-control-sm form-select-solid"
-                                        data-live-search="true" title="Lembaga / Fakultas" id="pilih_kategori" required>
-                                        <option value="1">Lembaga</option>
-                                        <option value="2">Fakultas</option>
-                                    </select>
-
-                                </div>
-                            </div>
-                            <div class="flex-column mb-8 fv-row" id="ll_lembaga">
-                                <!--begin::Label-->
-                                <label class="d-flex align-items-center fs-6 fw-bold mb-2 required">
-                                    <span>Lembaga</span>
-                                </label>
-                                <!--end::Label-->
-                                <select class="selectpicker form-control form-control-sm form-select-solid"
-                                    data-live-search="true" title="Lembaga" id="id_lembaga" name="id_lembaga" >
-
-                                </select>
-
-                            </div>
-
-                            <div class="flex-column mb-8 fv-row" id="ll_fakultas">
-                                <!--begin::Label-->
-                                <label class="d-flex align-items-center fs-6 fw-bold mb-2 required">
-                                    <span>Fakultas</span>
-                                </label>
-                                <!--end::Label-->
-                                <select class="selectpicker form-control form-control-sm form-select-solid"
-                                    data-live-search="true" title="Fakultas" id="id_fakultas" name="id_fakultas">
-
-                                </select>
-
                             </div>
                             <div class="flex-column mb-8 fv-row" id="ll_prodi">
                                 <!--begin::Label-->
@@ -184,30 +146,12 @@
     <script src="{{ asset('assets/plugins/custom/select/bootstrap-select.min.js') }}"></script>
     <script>
         kategori();
-        $("#ll_lembaga").hide();
-        $("#ll_fakultas").hide();
         $("#ll_prodi").hide();
-        $("#pilih_kategori").on("change", function() {
-            var x = $("#pilih_kategori").find("option:selected").val()
-            if(x == 1){
-                $("#ll_lembaga").show();
-                $("#ll_fakultas").hide();
-                $("#ll_prodi").hide();
-                lembaga();
-            }else if(x == 2){
-                $("#ll_lembaga").hide();
-                $("#ll_fakultas").show();
-                $("#ll_prodi").show();
-                fakultas();
-            }
-        });
+        if("{{$id_fakultas != null}}"){
+            prodi("{{$id_fakultas}}")
+            $("#ll_prodi").show();
 
-        $("#id_fakultas").on("change", function() {
-            var x = $("#id_fakultas").find("option:selected").val()
-            if(x != ""){
-                prodi(x)
-            }
-        });
+        }
 
         $("#id_kategori_berkas").on("change", function() {
             var xx = $("#id_kategori_berkas").find("option:selected").val()
@@ -216,6 +160,7 @@
                 sub_kategori_berkas(xx)
             }
         });
+
         function kategori() {
             const x = new Promise((resolve, reject) => {
                 $.ajax({
@@ -233,85 +178,6 @@
                 $("#id_kategori_berkas").empty();
                 $.each(data, function(index, item) {
                     $("#id_kategori_berkas").append("<option value='" + item.id_kategori_berkas + "'>" + item.nama_kategori_berkas +"</option>");
-                });
-                $('.selectpicker').selectpicker('refresh');
-                $('.selectpicker').selectpicker('render');
-
-            }).catch(function(error) {
-                console.log(error);
-            });
-        }
-        function lembaga() {
-            const x = new Promise((resolve, reject) => {
-                $.ajax({
-                    url: "{{ url('api/lembaga') }}",
-                    dataType: 'json',
-                    success: function(data) {
-                        resolve(data)
-                    },
-                    error: function(error) {
-                        reject(error)
-                    },
-                });
-            });
-            x.then((data) => {
-                $("#id_lembaga").empty();
-                $("#id_lembaga").append('<option value="">All Data</option>');
-                $.each(data, function(index, item) {
-                    $("#id_lembaga").append("<option value='" + item.id_lembaga + "'>" + item.nama_lembaga +"</option>");
-                });
-                $('.selectpicker').selectpicker('refresh');
-                $('.selectpicker').selectpicker('render');
-
-            }).catch(function(error) {
-                console.log(error);
-            });
-        }
-        function fakultas() {
-            const x = new Promise((resolve, reject) => {
-                $.ajax({
-                    url: "{{ url('api/fakultas') }}",
-                    dataType: 'json',
-                    success: function(data) {
-                        resolve(data)
-                    },
-                    error: function(error) {
-                        reject(error)
-                    },
-                });
-            });
-            x.then((data) => {
-                $("#id_fakultas").empty();
-                $("#id_fakultas").append('<option value="">All Data</option>');
-                $.each(data, function(index, item) {
-                    $("#id_fakultas").append("<option value='" + item.id_fakultas + "'>" + item.nama_fakultas +"</option>");
-                });
-                $('.selectpicker').selectpicker('refresh');
-                $('.selectpicker').selectpicker('render');
-
-            }).catch(function(error) {
-                console.log(error);
-            });
-        }
-        function prodi(id) {
-            const x = new Promise((resolve, reject) => {
-                $.ajax({
-                    url: "{{ url('api/prodi') }}"+"/"+id,
-                    dataType: 'json',
-                    success: function(data) {
-                        resolve(data)
-                    },
-                    error: function(error) {
-                        reject(error)
-                    },
-                });
-            });
-            x.then((data) => {
-                $("#id_prodi").empty();
-                $("#id_prodi").append('<option value="">All Data</option>');
-                $.each(data, function(index, item) {
-                    $("#id_prodi").append("<option value='" + item.prodi_id + "'>" + item
-                        .program_studi + "</option>");
                 });
                 $('.selectpicker').selectpicker('refresh');
                 $('.selectpicker').selectpicker('render');
@@ -349,6 +215,33 @@
             });
         }
 
+        function prodi(id) {
+            const x = new Promise((resolve, reject) => {
+                $.ajax({
+                    url: "{{ url('api/prodi') }}"+"/"+id,
+                    dataType: 'json',
+                    success: function(data) {
+                        resolve(data)
+                    },
+                    error: function(error) {
+                        reject(error)
+                    },
+                });
+            });
+            x.then((data) => {
+                $("#id_prodi").empty();
+                $("#id_prodi").append('<option value="">All Data</option>');
+                $.each(data, function(index, item) {
+                    $("#id_prodi").append("<option value='" + item.prodi_id + "'>" + item
+                        .program_studi + "</option>");
+                });
+                $('.selectpicker').selectpicker('refresh');
+                $('.selectpicker').selectpicker('render');
+
+            }).catch(function(error) {
+                console.log(error);
+            });
+        }
 
         window.onbeforeunload = function() {
             $("button[type=submit]").prop("disabled", "disabled");

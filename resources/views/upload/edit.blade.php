@@ -17,7 +17,7 @@
                 </h3>
 
             </div>
-            <form action="{{ route('upload.update',['upload' => $id]) }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('upload.update', ['upload' => $id]) }}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="card-body">
@@ -59,8 +59,10 @@
                                     <!--end::Label-->
                                     <select class="selectpicker form-control form-control-sm form-select-solid"
                                         data-live-search="true" title="Lembaga / Fakultas" id="pilih_kategori" required>
-                                        <option value="1" {{$one->id_lembaga != null ? "selected" : ""}}>Lembaga</option>
-                                        <option value="2"{{$one->id_lembaga != null ? "" : "selected"}}>Fakultas</option>
+                                        <option value="1" {{ $one->id_lembaga != null ? 'selected' : '' }}>Lembaga
+                                        </option>
+                                        <option value="2"{{ $one->id_lembaga != null ? '' : 'selected' }}>Fakultas
+                                        </option>
                                     </select>
 
                                 </div>
@@ -85,7 +87,7 @@
                                 </label>
                                 <!--end::Label-->
                                 <select class="selectpicker form-control form-control-sm form-select-solid"
-                                    data-live-search="true" title="Fakultas" id="id_fakultas">
+                                    data-live-search="true" title="Fakultas" id="id_fakultas" name="id_fakultas">
 
                                 </select>
 
@@ -97,7 +99,7 @@
                                 </label>
                                 <!--end::Label-->
                                 <select class="selectpicker form-control form-control-sm form-select-solid"
-                                    data-live-search="true" title="Program Studi" id="id_prodi">
+                                    data-live-search="true" title="Program Studi" id="id_prodi" name="id_prodi">
 
                                 </select>
 
@@ -108,7 +110,8 @@
                                     <span>Nama Berkas</span>
                                 </label>
                                 <!--end::Label-->
-                                <input type="text" name="nama_berkas" class="form-control form-control-sm " value="{{$one->nama_berkas}}" required />
+                                <input type="text" name="nama_berkas" class="form-control form-control-sm "
+                                    value="{{ $one->nama_berkas }}" required />
                             </div>
                             <div class="d-flex flex-column mb-8 fv-row">
                                 <!--begin::Label-->
@@ -116,7 +119,8 @@
                                     <span>Keterangan Berkas</span>
                                 </label>
                                 <!--end::Label-->
-                                <input type="text" name="keterangan_berkas" class="form-control form-control-sm " value="{{$one->keterangan_berkas}}" />
+                                <input type="text" name="keterangan_berkas" class="form-control form-control-sm "
+                                    value="{{ $one->keterangan_berkas }}" />
 
                             </div>
                             <div class="d-flex flex-column mb-8 fv-row">
@@ -127,11 +131,12 @@
                                 <!--end::Label-->
                                 <input type="file" name="berkas" class="form-control form-control-sm" id="berkas"
                                     accept=".pdf">
-                                    <a href="{{ route('berkas_file', ['data'=>$one->berkas]) }}" target="blank_" class="btn btn-sm btn-primary w-200px mt-5">Download Berkas</a>
+                                <a href="{{ route('berkas_file', ['data' => $one->berkas]) }}" target="blank_"
+                                    class="btn btn-sm btn-primary w-200px mt-5">Download Berkas</a>
 
                             </div>
 
-                            <div class="d-flex flex-column mb-5 fv-row">
+                            <div class="d-flex flex-column mb-8 fv-row">
                                 <!--begin::Label-->
                                 <label class="d-flex align-items-center fs-7 fw-bold mb-3 required">
                                     <span>Status Berkas</span>
@@ -142,7 +147,8 @@
                                         <div class="form-check form-check-custom form-check-solid">
                                             <!--begin::Input-->
                                             <input class="form-check-input me-3" name="status_berkas" type="radio"
-                                                value="y" id="kt_modal_update_role_option_1" {{$one->status_berkas == 'y' ? 'checked' : '' }} required>
+                                                value="y" id="kt_modal_update_role_option_1"
+                                                {{ $one->status_berkas == 'y' ? 'checked' : '' }} required>
                                             <!--end::Input-->
                                             <!--begin::Label-->
                                             <label class="form-check-label" for="kt_modal_update_role_option_1">
@@ -155,7 +161,8 @@
                                         <div class="form-check form-check-custom form-check-solid">
                                             <!--begin::Input-->
                                             <input class="form-check-input me-3" name="status_berkas" type="radio"
-                                                value="n" id="kt_modal_update_role_option_2"  {{$one->status_berkas == 'n' ? 'checked' : '' }} required>
+                                                value="n" id="kt_modal_update_role_option_2"
+                                                {{ $one->status_berkas == 'n' ? 'checked' : '' }} required>
                                             <!--end::Input-->
                                             <!--begin::Label-->
                                             <label class="form-check-label" for="kt_modal_update_role_option_2">
@@ -266,6 +273,7 @@
             }).catch(function(error) {
                 console.log(error);
             });
+
         }
 
         function lembaga() {
@@ -294,11 +302,11 @@
                     $("#id_lembaga").val("{{ $one->id_lembaga }}")
                     $('.selectpicker').selectpicker('refresh');
                     $('.selectpicker').selectpicker('render');
-                    sub_kategori_berkas("{{ $one->id_lembaga }}")
                 }
             }).catch(function(error) {
                 console.log(error);
             });
+
         }
 
         function fakultas() {
@@ -333,6 +341,7 @@
             }).catch(function(error) {
                 console.log(error);
             });
+
         }
 
         function prodi(id) {
@@ -365,6 +374,7 @@
             }).catch(function(error) {
                 console.log(error);
             });
+
         }
 
         function sub_kategori_berkas(id) {
@@ -385,7 +395,8 @@
 
                 $("#id_sub_berkas").empty();
                 $.each(data, function(index, item) {
-                    $("#id_sub_berkas").append("<option value='" + item.id_sub_berkas + "'>" + item.nama_sub_berkas + "</option>");
+                    $("#id_sub_berkas").append("<option value='" + item.id_sub_berkas + "'>" + item
+                        .nama_sub_berkas + "</option>");
                 });
                 $('.selectpicker').selectpicker('refresh');
                 $('.selectpicker').selectpicker('render');
@@ -394,10 +405,10 @@
                     $('.selectpicker').selectpicker('refresh');
                     $('.selectpicker').selectpicker('render');
                 }
-
             }).catch(function(error) {
                 console.log(error);
             });
+
         }
 
 

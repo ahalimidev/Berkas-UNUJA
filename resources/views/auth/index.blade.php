@@ -7,7 +7,7 @@
 @endsection
 
 @section('title-header')
-    <h3>List Sub Kategori berkas</h3>
+    <h3>List Login</h3>
 @endsection
 
 @section('content')
@@ -15,20 +15,19 @@
         <div class="card mb-5 mb-xl-8 border-2 shadow p-3 mb-5 bg-white rounded">
             <div class="card-header">
                 <h3 class="card-title align-items-start flex-column">
-                    <span class="card-label fw-bolder fs-3 mb-1">List Sub Kategori berkas</span>
+                    <span class="card-label fw-bolder fs-3 mb-1">List Login</span>
                 </h3>
                 <div class="card-toolbar">
 
                     <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
-                        <a type="button" class="btn btn-sm btn-primary" href="{{ route('sub_kategori.create') }}">Add
-                            Sub Kategori berkas</a>
+                        <a type="button" class="btn btn-sm btn-primary" href="{{ route('auth.create') }}">Add Login</a>
                     </div>
                 </div>
 
             </div>
             <div class="card-body">
                 <div class="text-muted mb-3">
-                    Pada halaman ini digunakan untuk menambah, mengedit, dan detail Sub Kategori berkas
+                    Pada halaman ini digunakan untuk menambah, mengedit, dan detail Login
                 </div>
 
                 <div class="table-responsive">
@@ -37,8 +36,11 @@
                             <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
                                 <th class="w-25px"></th>
                                 <th class="w-35px text-center">Actions</th>
-                                <th class="w-50 text-center">Kategori berkas</th>
-                                <th class="w-50 text-center">Sub Kategori berkas</th>
+                                <th class="w-100px text-center">Nama</th>
+                                <th class="w-100px text-center">Username</th>
+                                <th class="w-100px text-center">Status</th>
+                                <th class="w-100px text-center">Lembaga</th>
+
                             </tr>
                         </thead>
                         <tbody class="text-center">
@@ -91,29 +93,82 @@
                     {
                         data: "action",
                         render: function(data) {
-                            var detail = '{{ route('sub_kategori.show', [':kategori']) }}';
-                            var edit = '{{ route('sub_kategori.edit', [':kategori']) }}';
+                            var detail = '{{ route('auth.show', [':auth']) }}';
+                            var edit = '{{ route('auth.edit', [':auth']) }}';
                             var x_edit = "";
                             var x_detail = "";
-                            x_detail =
-                                `<a data-toggle='tooltip' data-placement='top' title='View' href='${detail.replace(':kategori', data)}' class='btn btn-icon btn-bg-light btn-active-text-primary btn-sm me-1'><span class='bi bi-file-text ' aria-hidden='true'></span></a>`;
-                            x_edit =
-                                `<a data-toggle='tooltip' data-placement='top' title='Edit' href='${edit.replace(':kategori', data)}' class='btn btn-icon btn-bg-light btn-active-text-primary btn-sm me-1'><span class='bi bi-pencil ' aria-hidden='true'></span> </a>`;
-                            return `${x_detail} ${x_edit} `;
+                            var x_delete = "";
+                                x_detail =
+                                    `<a data-toggle='tooltip' data-placement='top' title='View' href='${detail.replace(':auth', data)}' class='btn btn-icon btn-bg-light btn-active-text-primary btn-sm me-1'><span class='bi bi-file-text ' aria-hidden='true'></span></a>`;
+                                x_edit =
+                                    `<a data-toggle='tooltip' data-placement='top' title='Edit' href='${edit.replace(':auth', data)}' class='btn btn-icon btn-bg-light btn-active-text-primary btn-sm me-1'><span class='bi bi-pencil ' aria-hidden='true'></span> </a>`;
+                                x_delete =
+                                    `<a data-toggle='tooltip' data-placement='top' title='Delete' onclick='deleteConfirmation(${data})' class='btn btn-icon btn-bg-light btn-active-text-primary btn-sm me-1'><span class='bi bi-trash ' aria-hidden='true'></span></a>`;
+                            return `${x_detail} ${x_edit} ${x_delete}`;
                         },
                         orderable: true,
                         searchable: true,
                     },
                     {
-                        data: "nama_kategori_berkas",
-                        name: "nama_kategori_berkas"
+                        data: "nama",
+                        name: "nama"
                     },
                     {
-                        data: "nama_sub_berkas",
-                        name: "nama_sub_berkas"
+                        data: "username",
+                        name: "username"
+                    },
+                    {
+                        data: "status",
+                        name: "status"
+                    },
+                    {
+                        data: "lembaga",
+                        render: function(data) {
+                            var x = data.split("#_#");
+                            return `${x[0]}${x[1]}`;
+                        },
+                        orderable: true,
+                        searchable: true,
                     },
                 ],
             });
         });
+        function deleteConfirmation(auth) {
+            Swal.fire({
+                title: 'Apa kamu yakin?',
+                text: "Itu akan dihapus secara permanen!",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                allowOutsideClick: false,
+                showCancelButton: true,
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus!',
+            }).then((result) => {
+                if (result.value) {
+                    var destroy = '{{ route('auth.destroy', [':auth']) }}';
+                    $.ajax({
+                        url: destroy.replace(':auth', auth),
+                        method: 'DELETE',
+                        data: {
+                            "auth": auth,
+                            "_token": "{{ csrf_token() }}"
+                        },
+                        success: function(data) {
+                            if (data == 1 || data == 0) {
+                                Swal.fire('Deleted!', 'File telah dihapus.', 'success')
+                                window.location.reload();
+                            } else {
+                                Swal.fire('Permission', 'Tidak memiliki akses hapus!', 'error')
+                            }
+                        },
+                        error: function(error) {
+                            Swal.fire('Oops...', 'Ada yang salah dengan penghapusan !', 'error')
+
+                        }
+                    });
+
+                }
+            });
+        }
     </script>
 @endsection

@@ -38,7 +38,12 @@
                         <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-primary fw-bold py-4 fs-6 w-275px"
                             data-kt-menu="true">
                             <div class="menu-item px-5">
-                                <a href="" lass="menu-link px-5">Keluar Aplikaasi</a>
+                                @if (Auth::guard('web')->check())
+                                <a href="{{ route('auth.logout') }}" lass="menu-link px-5">Keluar Aplikaasi</a>
+
+                                @else
+                                 <a href="{{ route('auth.login') }}" lass="menu-link px-5">Masuk Aplikaasi</a>
+                                @endif
                             </div>
                         </div>
                     </div>

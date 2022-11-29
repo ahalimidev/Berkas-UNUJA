@@ -48,7 +48,7 @@
                         <div class="col-sm-12">
                             <div class="d-flex flex-column mb-2 fv-row">
                                 <!--begin::Label-->
-                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2 required">
                                     <span>Lembaga / Fakultas</span>
                                 </label>
                                 <!--end::Label-->
@@ -114,6 +114,9 @@
         <div class="col-sm-9">
             <div class="card border-2 shadow  bg-white rounded p-4 m-1">
                 <div class="card-body">
+                    <div class="text-danger mb-3">
+                       Perhatikan pada status di kolom. Jika Status Private harus login serta Status Publik tanpa login untuk download berkas
+                    </div>
                     <div class="table-responsive">
                         <table id="example" class="table-bordered dt-responsive nowrap table" style="width:100%">
                             <thead>
@@ -150,8 +153,13 @@
         var id_lembaga = "";
         var id_sub_berkas = "";
         var id_prodi = ""
-        var download = '{{ route('berkas_download', [':upload']) }}'
+
+        var download = '{{ route('berkas_file', [':upload']) }}'
+        var show = '{{ route('show_file', [':upload']) }}'
+        var auth_login = '{{ route('auth.index') }}'
         $(document).ready(function() {
+            $.fn.dataTable.ext.errMode = 'none';
+
             var url_x = "{{ url('/') }}";
             table = $('#example').DataTable({
                 stateSave: true,
@@ -169,9 +177,22 @@
                         data: "action",
                         className: "text-center p-4",
                         render: function(data) {
-                            x_download =
-                                `<a data-toggle='tooltip' data-placement='top' title='Download'  href='${download.replace(':upload', data)}' class='btn btn-icon btn-bg-light btn-active-text-primary btn-sm me-1'><span class='bi bi-download ' aria-hidden='true'></span></a>`;
-                            return `${x_download} `;
+                            var xx = data.split("#_#");
+                            if (xx[1] == 'n') {
+                                if ("{{ $login }}") {
+                                    var x_download = `<a data-toggle='tooltip' data-placement='top' title='Download'  href='${download.replace(':upload', xx[0])}' class='btn btn-icon btn-bg-light btn-active-text-primary btn-sm me-1'><span class='bi bi-download ' aria-hidden='true'></span></a>`;
+                                    var x_show = `<a data-toggle='tooltip' data-placement='top' title='Show' traget="_blank"  href='${show.replace(':upload', xx[0])}' class='btn btn-icon btn-bg-light btn-active-text-primary btn-sm me-1'><span class='bi bi-file-pdf' aria-hidden='true'></span></a>`;
+                                    return `${x_download} ${x_show}`;
+                                } else {
+                                    var x_download = `<a data-toggle='tooltip' data-placement='top' title='Login'  href='${auth_login}' class='btn btn-icon btn-bg-light btn-active-text-primary btn-sm me-1'><span class='bi bi-box-arrow-in-right' aria-hidden='true'></span></a>`;
+                                    return `${x_download} `;
+                                }
+                            } else {
+                                var x_show = `<a data-toggle='tooltip' data-placement='top' title='Show' traget="_blank"  href='${show.replace(':upload', xx[0])}' class='btn btn-icon btn-bg-light btn-active-text-primary btn-sm me-1'><span class='bi bi-file-pdf' aria-hidden='true'></span></a>`;
+                                var x_download =  `<a data-toggle='tooltip' data-placement='top' title='Download'  href='${download.replace(':upload', xx[0])}' class='btn btn-icon btn-bg-light btn-active-text-primary btn-sm me-1'><span class='bi bi-download ' aria-hidden='true'></span></a>`;
+                                return `${x_download} ${x_show}`;
+                            }
+
                         },
                         orderable: true,
                         searchable: true,
@@ -181,12 +202,31 @@
                         className: "p-4",
                         render: function(data) {
                             var x = data.split("#_#")
-                            var y = `
-                            <div>
-                                <a  href="${download.replace(':upload', x[1])}">${x[0]}</a>
-                                <p class='text-muted'>${x[2]}</p>
-                            </div>`
-                            return y;
+                            if (x[3] == 'n') {
+                                if ("{{ $login }}") {
+                                    var y = `
+                                    <div>
+                                        <a  href="${download.replace(':upload', x[1])}">${x[0]}</a>
+                                        <p class='text-muted'>${x[2]}</p>
+                                    </div>`
+                                    return y;
+                                } else {
+                                    var y = `
+                                <div>
+                                    <a  href="${auth_login}">${x[0]}</a>
+                                    <p class='text-muted'>${x[2]}</p>
+                                </div>`
+                                    return y;
+                                }
+                            } else {
+                                var y = `
+                                <div>
+                                    <a  href="${download.replace(':upload', x[1])}">${x[0]}</a>
+                                    <p class='text-muted'>${x[2]}</p>
+                                </div>`
+                                return y;
+                            }
+
                         },
                         orderable: true,
                         searchable: true,
@@ -420,8 +460,7 @@
             if (id_kategori_berkas == "" || id_sub_berkas == "" || pilih_kategori == "") {
                 Swal.fire('Infromasi', 'Kategori dan sub kategori berkas kosong', 'error')
             } else {
-                var url =
-                    `?id_kategori_berkas=${id_kategori_berkas}&id_sub_berkas=${id_sub_berkas}&pilih_kategori=${pilih_kategori}&id_lembaga=${id_lembaga}&id_fakultas=${id_fakultas}&id_prodi=${id_prodi}`;
+                var url =`?q=pencarian&id_kategori_berkas=${id_kategori_berkas}&id_sub_berkas=${id_sub_berkas}&pilih_kategori=${pilih_kategori}&id_lembaga=${id_lembaga}&id_fakultas=${id_fakultas}&id_prodi=${id_prodi}`;
                 var url_x = "{{ url('/') }}" + url;
                 table.ajax.url(url_x);
                 table.ajax.reload();

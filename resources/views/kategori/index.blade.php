@@ -36,9 +36,8 @@
                         <thead>
                             <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
                                 <th class="w-25px"></th>
-
-                                <th class="text-center">Actions</th>
-                                <th class="text-center">Kategori Berkas</th>
+                                <th class="w-35px text-center">Actions</th>
+                                <th class="w-100 text-center">Kategori Berkas</th>
 
                             </tr>
                         </thead>
