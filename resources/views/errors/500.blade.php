@@ -9,6 +9,26 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,600,700" />
 	<link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
 	<link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script type="text/javascript">
+        function callbackThen(response) {
+            response.json().then(function(data) {
+                if (data.success && data.score >= 0.6) {
+                    console.log('valid recaptcha');
+                } else {
+                    Swal.fire('Oops...', 'recaptcha error', 'error')
+                }
+            });
+        }
+        function callbackCatch(error) {
+            Swal.fire('Oops...', error, 'error')
+        }
+    </script>
+
+    {!! htmlScriptTagJsApi([
+        'callback_then' => 'callbackThen',
+        'callback_catch' => 'callbackCatch',
+    ]) !!}
 </head>
 
 <body id="kt_body" class="bg-body">
@@ -17,7 +37,7 @@
         <div class="d-flex flex-column flex-center flex-column-fluid p-10">
             <img src="{{ asset('assets/media/illustrations/sketchy/17.png') }}" alt="" class="mw-100 mb-10 h-lg-450px" />
             <h1 class="fw-bold mb-10" style="color: #A3A3C7">Kesalahan server dari dalam</h1>
-            <a href="" class="btn btn-primary">Kembali</a>
+            <a href="{{ route('dashboard.index') }}" class="btn btn-primary">Kembali</a>
         </div>
     </div>
     <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
