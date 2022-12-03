@@ -131,7 +131,7 @@
                                 <!--end::Label-->
                                 <input type="file" name="berkas" class="form-control form-control-sm" id="berkas"
                                     accept=".pdf">
-                                <a href="{{ route('berkas_file', ['data' => $one->berkas]) }}" target="blank_"
+                                <a href="{{ route('show_file', ['data' => $one->berkas]) }}" target="blank_"
                                     class="btn btn-sm btn-primary w-200px mt-5">Download Berkas</a>
 
                             </div>

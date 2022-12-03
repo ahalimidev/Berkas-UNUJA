@@ -55,7 +55,7 @@
                                 <select class="selectpicker form-control form-control-sm form-select-solid"
                                     data-live-search="true" title="Lembaga / Fakultas" id="pilih_kategori"
                                     name="pilih_kategori" required>
-                                    <option value="0">Semua Lembaga Dan Fakultas</option>
+                                    <option value="0" selected>Semua Lembaga Dan Fakultas</option>
                                     <option value="1">Lembaga</option>
                                     <option value="2">Fakultas</option>
                                 </select>
@@ -123,7 +123,7 @@
                                 <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
                                     <th class="w-50px text-center">Download</th>
                                     <th class="w-100">Nama Berkas</th>
-                                    <th class="w-100px">Lembaga</th>
+                                    <th class="w-50px">Lembaga</th>
                                     <th class="w-100px">Status</th>
                                 </tr>
                             </thead>
@@ -149,7 +149,7 @@
         var table;
         var id_kategori_berkas = "";
         var id_fakultas = "";
-        var pilih_kategori = "";
+        var pilih_kategori = "0";
         var id_lembaga = "";
         var id_sub_berkas = "";
         var id_prodi = ""

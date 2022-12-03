@@ -42,7 +42,7 @@
                             <div class="d-flex flex-column mb-8 fv-row">
                                 <!--begin::Label-->
                                 <label class="d-flex align-items-center fs-6 fw-bold mb-2 required">
-                                    <span>Sub Kategori_berkas</span>
+                                    <span>Sub Kategori Berkas</span>
                                 </label>
                                 <!--end::Label-->
                                 <input type="text" name="nama_sub_berkas" class="form-control form-control-sm" required />

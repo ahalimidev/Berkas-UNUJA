@@ -31,10 +31,10 @@ class DashboardController extends Controller
                     return redirect()->intended(url("/"));
                 }
             } else {
-                return Redirect()->route('auth.login')->withInput()->with('error', 'Email dan Password salah');
+                return Redirect()->route('auth.login')->withInput()->with('error', 'Username dan Password salah');
             }
         } else {
-            return Redirect()->route('auth.login')->withInput()->with('error', 'Email dan Password salah');
+            return Redirect()->route('auth.login')->withInput()->with('error', 'Username dan Password salah');
         }
     }
     public function logout()
@@ -134,12 +134,44 @@ class DashboardController extends Controller
                     })
                     ->make(true);
             }
+        }else{
+            $all = DB::select("SELECT berkas.nama_berkas,berkas.berkas,berkas.keterangan_berkas,berkas.status_berkas,master_lembaga.nama_lembaga, master_fakultas.nama_fakultas, master_prodi.program_studi FROM berkas
+            LEFT JOIN master_lembaga on master_lembaga.id_lembaga = berkas.id_lembaga
+            LEFT JOIN master_fakultas on master_fakultas.id_fakultas = berkas.id_fakultas
+            LEFT JOIN master_prodi on master_prodi.prodi_id = berkas.id_prodi where berkas.berkas is not null and berkas.status_berkas = 'y' ");
+            if ($req->ajax()) {
+                return DataTables::of($all)
+                    ->addIndexColumn()
+                    ->editColumn('nama_berkas', function ($model) {
+                        return $model->nama_berkas . '#_#' . $model->berkas . '#_#' . $model->keterangan_berkas . '#_#' . $model->status_berkas;
+                    })
+                    ->addColumn('lembaga', function ($model) {
+                        return $model->nama_lembaga . '#_#' . $model->nama_fakultas . '#_#' . $model->program_studi;
+                    })
+                    ->addColumn('action', function ($model) {
+                        return $model->berkas . '#_#' . $model->status_berkas;
+                    })
+                    ->make(true);
+            }
         }
 
         return view('upload.download', compact('login'));
     }
     public function file($data)
     {
+
+        $x = DB::table('berkas')->select('nama_berkas')->where('berkas',$data)->first();
+
+        $path = public_path("../berkas/") . $data;
+        if (!File::exists($path)) {
+            abort(404);
+        }
+        $file = File::get($path);
+        $extension = File::extension($path);
+
+        return response()->download($path,$x->nama_berkas.'.'.$extension);
+
+
         $path = public_path("../berkas/") . $data;
         if (!File::exists($path)) {
             abort(404);
@@ -153,14 +185,13 @@ class DashboardController extends Controller
 
     public function show_pdf($data)
     {
-        $path = public_path("../berkas/") . $data;
+       $path = public_path("../berkas/") . $data;
         if (!File::exists($path)) {
             abort(404);
         }
-        $header = [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="' . $data . '"'
-        ];
-        return response()->file($path, $header);
+        $file = File::get($path);
+        $type = File::mimeType($path);
+        $response = response()->make($file, 200);
+        $response->header("Content-Type", $type);
     }
 }

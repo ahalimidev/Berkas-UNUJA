@@ -112,7 +112,7 @@
                                 <span>Berkas</span>
                             </label>
                             <!--end::Label-->
-                            <a href="{{ route('berkas_file', ['data'=>$one->berkas]) }}" target="blank_" class="btn btn-sm btn-primary w-200px ">Download Berkas</a>
+                            <a href="{{ route('show_file', ['data'=>$one->berkas]) }}" target="blank_" class="btn btn-sm btn-primary w-200px ">Download Berkas</a>
                         </div>
 
                         <div class="d-flex flex-column mb-5 fv-row">
