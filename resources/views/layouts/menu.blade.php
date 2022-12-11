@@ -6,7 +6,7 @@
         <h1 class=" mt-5"><span class="text-primary">Universitas</span> <span class="text-warning">Nurul
                 Jadid</span></h1>
     </div>
-    <div class="aside-menu flex-column-fluid mt-8">
+    <div class="aside-menu flex-column-fluid ">
         <div class="hover-scroll-overlay-y my-5 my-lg-5" id="kt_aside_menu_wrapper" data-kt-scroll="true"
             data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-height="auto"
             data-kt-scroll-dependencies="#kt_aside_logo, #kt_aside_footer" data-kt-scroll-wrappers="#kt_aside_menu"

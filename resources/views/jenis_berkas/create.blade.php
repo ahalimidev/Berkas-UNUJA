@@ -3,9 +3,8 @@
 @section('css')
 @endsection
 
-@section('list')
-<li class="breadcrumb-item text-gray-800">Jenis Berkas</li>
-<li class="text-gray-800">Create Jenis Berkas</li>
+@section('title-header')
+    <h3>Create Jenis Berkas</h3>
 @endsection
 
 @section('content')

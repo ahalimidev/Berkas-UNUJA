@@ -5,9 +5,8 @@
 
 @endsection
 
-@section('list')
-<li class="breadcrumb-item text-gray-800">User</li>
-<li class="text-gray-800">Create User</li>
+@section('title-header')
+    <h3>Create User</h3>
 @endsection
 
 @section('content')

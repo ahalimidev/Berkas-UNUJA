@@ -6,9 +6,8 @@
     <link rel="stylesheet" href="{{ asset('assets/plugins/custom/datatables/buttons.dataTables.min.css') }}">
 @endsection
 
-@section('list')
-<li class="breadcrumb-item text-gray-800">User</li>
-<li class="text-gray-800">List User</li>
+@section('title-header')
+    <h3>List User</h3>
 @endsection
 
 @section('content')

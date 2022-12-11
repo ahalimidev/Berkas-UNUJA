@@ -59,7 +59,7 @@ class UserController extends Controller
             return Redirect()->route('user.create')->withInput()->with('error', 'Esername '.$request->username.' sudah ada');
         }
         $save = $request->all();
-        $save["create_by"] =  Auth::guard("web")->nama;
+        $save["create_by"] =  Auth::guard("web")->user()->nama;
         $save["create_date"] = date('Y-m-d H:i:s');
         $save["password"] = bcrypt($request->password);
 
@@ -111,7 +111,7 @@ class UserController extends Controller
                 'id_unit' => $request->id_unit,
                 'nama' => $request->nama,
                 'username' => $request->username,
-                'update_by' => Auth::guard("web")->nama,
+                'update_by' => Auth::guard("web")->user()->nama,
                 'update_date' => date('Y-m-d H:i:s'),
                 'password' =>  bcrypt($request->password),
                 'status' =>  $request->status,
@@ -121,7 +121,7 @@ class UserController extends Controller
                 'id_unit' => $request->id_unit,
                 'nama' => $request->nama,
                 'username' => $request->username,
-                'update_by' => Auth::guard("web")->nama,
+                'update_by' => Auth::guard("web")->user()->nama,
                 'update_date' => date('Y-m-d H:i:s'),
                 'status' =>  $request->status,
             ]);
@@ -145,7 +145,7 @@ class UserController extends Controller
     {
 
         foreach ($request->id_user as $row) {
-            $save["update_by"] =  Auth::guard("web")->nama;
+            $save["update_by"] =  Auth::guard("web")->user()->nama;
             $save["update_date"] = date('Y-m-d H:i:s');
             $save['status'] = $request->status;
             User::updateOrCreate(["id_user" => $row], $save);

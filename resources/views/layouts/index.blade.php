@@ -44,10 +44,8 @@
                 @include('layouts.header')
 
                 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-                    <div class="post d-flex flex-column-fluid" id="kt_post">
-                        <div id="kt_content_container" class="container-fluid">
-                            @yield('content')
-                        </div>
+                    <div id="kt_content_container" class="container">
+                        @yield('content')
                     </div>
                 </div>
                 @include('layouts.footer')

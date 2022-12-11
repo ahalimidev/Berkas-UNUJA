@@ -67,7 +67,7 @@ class JenisBerkasController extends Controller
 
         $save = $request->all();
         $save["nama_jenis_berkas"] = $request->nama_jenis_berkas;
-        $save["create_by"] =  Auth::guard("web")->nama;
+        $save["create_by"] =  Auth::guard("web")->user()->nama;
         $save["create_date"] = date('Y-m-d H:i:s');
         JenisBerkas::create($save);
         return Redirect()->route('jenis_berkas.index');
@@ -126,7 +126,7 @@ class JenisBerkasController extends Controller
         }
         $save = $request->all();
         $save["nama_jenis_berkas"] = $request->nama_jenis_berkas;
-        $save["update_by"] =  Auth::guard("web")->nama;
+        $save["update_by"] =  Auth::guard("web")->user()->nama;
         $save["update_date"] = date('Y-m-d H:i:s');
         JenisBerkas::updateOrCreate(["id_jenis_berkas" => $id], $save);
 
@@ -148,7 +148,7 @@ class JenisBerkasController extends Controller
     {
 
         foreach ($request->id_jenis_berkas as $row) {
-            $save["update_by"] =  Auth::guard("web")->nama;
+            $save["update_by"] =  Auth::guard("web")->user()->nama;
             $save["update_date"] = date('Y-m-d H:i:s');
             $save['status'] = $request->status;
             JenisBerkas::updateOrCreate(["id_jenis_berkas" => $row], $save);

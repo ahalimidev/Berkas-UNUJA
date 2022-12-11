@@ -24,87 +24,91 @@
                     <div class="row justify-content-md-center">
                         <div class="align-content-center">
                             <div class="row">
-                                <div class="flex-column mb-8 fv-row" >
+                                <div class="flex-column mb-8 fv-row">
                                     <!--begin::Label-->
                                     <label class="d-flex align-items-center fs-6 fw-bold mb-2 required">
                                         <span>Jenis Berkas</span>
                                     </label>
                                     <!--end::Label-->
                                     <select class="selectpicker form-control form-control-sm form-select-solid"
-                                        data-live-search="true" title="Jenis Berkas" id="id_jenis_berkas" name="id_jenis_berkas" required>
+                                        data-live-search="true" title="Jenis Berkas" id="id_jenis_berkas"
+                                        name="id_jenis_berkas" required>
                                         @foreach ($jenis_berkas as $item)
-                                            <option value="{{$item->id_jenis_berkas}}">{{$item->nama_jenis_berkas}}</option>
+                                            <option value="{{ $item->id_jenis_berkas }}">{{ $item->nama_jenis_berkas }}
+                                            </option>
                                         @endforeach
                                     </select>
 
                                 </div>
-                            <div class="d-flex flex-column mb-8 fv-row">
-                                <!--begin::Label-->
-                                <label class="d-flex align-items-center fs-6 fw-bold mb-2 required">
-                                    <span>Nama Berkas</span>
-                                </label>
-                                <!--end::Label-->
-                                <input type="text" name="nama_berkas" class="form-control form-control-sm " required />
-                            </div>
-                            <div class="d-flex flex-column mb-8 fv-row">
-                                <!--begin::Label-->
-                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">
-                                    <span>Keterangan Berkas</span>
-                                </label>
-                                <!--end::Label-->
-                                <input type="text" name="keterangan_berkas" class="form-control form-control-sm " />
-                            </div>
-                            <div class="d-flex flex-column mb-8 fv-row">
-                                <!--begin::Label-->
-                                <label class="d-flex align-items-center fs-6 fw-bold mb-2 required">
-                                    <span>Berkas</span>
-                                </label>
-                                <!--end::Label-->
-                                <input type="file" name="berkas" class="form-control form-control-sm" id="berkas" accept=".pdf" required>
-                            </div>
+                                <div class="d-flex flex-column mb-8 fv-row">
+                                    <!--begin::Label-->
+                                    <label class="d-flex align-items-center fs-6 fw-bold mb-2 required">
+                                        <span>Nama Berkas</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <input type="text" name="nama_berkas" class="form-control form-control-sm "
+                                        required />
+                                </div>
+                                <div class="d-flex flex-column mb-8 fv-row">
+                                    <!--begin::Label-->
+                                    <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+                                        <span>Keterangan Berkas</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <input type="text" name="keterangan_berkas" class="form-control form-control-sm " />
+                                </div>
+                                <div class="d-flex flex-column mb-8 fv-row">
+                                    <!--begin::Label-->
+                                    <label class="d-flex align-items-center fs-6 fw-bold mb-2 required">
+                                        <span>Berkas</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <input type="file" name="berkas" class="form-control form-control-sm" id="berkas"
+                                        accept=".pdf" required>
+                                </div>
 
-                            <div class="d-flex flex-column mb-8 fv-row">
-                                <!--begin::Label-->
-                                <label class="d-flex align-items-center fs-7 fw-bold mb-3 required">
-                                    <span>Status Berkas</span>
-                                </label>
-                                <!--end::Label-->
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-12 col-lg-6 col-lx-4 col-lxx-3 p-2">
-                                        <div class="form-check form-check-custom form-check-solid">
-                                            <!--begin::Input-->
-                                            <input class="form-check-input me-3" name="status_berkas" type="radio"
-                                                value="y" id="kt_modal_update_role_option_1" required>
-                                            <!--end::Input-->
-                                            <!--begin::Label-->
-                                            <label class="form-check-label" for="kt_modal_update_role_option_1">
-                                                <div class="fw-bolder text-gray-800">Publik</div>
-                                            </label>
-                                            <!--end::Label-->
+                                <div class="d-flex flex-column mb-8 fv-row">
+                                    <!--begin::Label-->
+                                    <label class="d-flex align-items-center fs-7 fw-bold mb-3 required">
+                                        <span>Status Berkas</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-6 col-lx-4 col-lxx-3 p-2">
+                                            <div class="form-check form-check-custom form-check-solid">
+                                                <!--begin::Input-->
+                                                <input class="form-check-input me-3" name="status_berkas" type="radio"
+                                                    value="y" id="kt_modal_update_role_option_1" required>
+                                                <!--end::Input-->
+                                                <!--begin::Label-->
+                                                <label class="form-check-label" for="kt_modal_update_role_option_1">
+                                                    <div class="fw-bolder text-gray-800">Publik</div>
+                                                </label>
+                                                <!--end::Label-->
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-12 col-lg-6 col-lx-4 col-lxx-3 p-2">
-                                        <div class="form-check form-check-custom form-check-solid">
-                                            <!--begin::Input-->
-                                            <input class="form-check-input me-3" name="status_berkas" type="radio"
-                                                value="n" id="kt_modal_update_role_option_2" required>
-                                            <!--end::Input-->
-                                            <!--begin::Label-->
-                                            <label class="form-check-label" for="kt_modal_update_role_option_2">
-                                                <div class="fw-bolder text-gray-800">Private</div>
-                                            </label>
-                                            <!--end::Label-->
+                                        <div class="col-sm-12 col-md-12 col-lg-6 col-lx-4 col-lxx-3 p-2">
+                                            <div class="form-check form-check-custom form-check-solid">
+                                                <!--begin::Input-->
+                                                <input class="form-check-input me-3" name="status_berkas" type="radio"
+                                                    value="n" id="kt_modal_update_role_option_2" required>
+                                                <!--end::Input-->
+                                                <!--begin::Label-->
+                                                <label class="form-check-label" for="kt_modal_update_role_option_2">
+                                                    <div class="fw-bolder text-gray-800">Private</div>
+                                                </label>
+                                                <!--end::Label-->
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-sm btn-primary w-250px" id="btnSubmit">
-                                    <span class="indicator-label">Save</span>
-                                </button>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-sm btn-primary w-250px" id="btnSubmit">
+                                        <span class="indicator-label">Save</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </form>
