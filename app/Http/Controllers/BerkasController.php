@@ -2,237 +2,205 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\berkas;
+use App\Models\Berkas;
+use App\Models\JenisBerkas;
+use App\Models\SubBerkas;
+use App\Models\ViewBerkas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 class BerkasController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index(Request $req)
     {
-         if(Auth::guard('web')->check()){
-            if(Auth::user('web')->status == "viewer"){
-                return redirect()->route('dashboard.index');
-            }
-       }else{
-         return redirect()->route('dashboard.index');
-       }
-
-        $x = Auth::user('web')->id_lembaga;
-        $y = Auth::user('web')->id_fakultas;
-        $id_lembaga = Auth::user('web')->id_lembaga == null ? '' :  "where berkas.id_lembaga = '$x' ";
-        $id_fakultas = Auth::user('web')->id_fakultas == null ? '' :  "where berkas.id_fakultas = '$y' ";
-
-        $all = DB::select("SELECT berkas.*,
-        master_lembaga.id_lembaga, master_lembaga.nama_lembaga,
-        master_fakultas.id_fakultas, master_fakultas.nama_fakultas,
-        master_prodi.prodi_id,master_prodi.program_studi,
-        kategori_berkas.id_kategori_berkas,kategori_berkas.nama_kategori_berkas,
-        sub_berkas.id_sub_berkas,sub_berkas.nama_sub_berkas FROM berkas
-        LEFT JOIN kategori_berkas on kategori_berkas.id_kategori_berkas = berkas.id_kategori_berkas
-        LEFT JOIN sub_berkas on sub_berkas.id_sub_berkas = berkas.id_sub_berkas
-        LEFT JOIN master_lembaga on master_lembaga.id_lembaga = berkas.id_lembaga
-        LEFT JOIN master_fakultas on master_fakultas.id_fakultas = berkas.id_fakultas
-        LEFT JOIN master_prodi on master_prodi.prodi_id = berkas.id_prodi
-        $id_fakultas $id_lembaga");
+        $id_unit = Auth::guard("web")->user()->id_unit;
+        $all = ViewBerkas::where('id_unit', $id_unit)->get();
         if ($req->ajax()) {
             return DataTables::of($all)
                 ->addIndexColumn()
+                ->addColumn('cek', function ($model) {
+                    return  $model->id_berkas;
+                })
                 ->addColumn('action', function ($model) {
-                    return $model->id_berkas . '#_#' . $model->berkas;
+                    return  $model->id_berkas;
                 })
                 ->make(true);
         }
         return view('berkas.index');
     }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
-         if(Auth::guard('web')->check()){
-            if(Auth::user('web')->status == "viewer"){
-                return redirect()->route('dashboard.index');
-            }
-       }else{
-         return redirect()->route('dashboard.index');
-       }
-
-        $id_fakultas = Auth::user('web')->id_fakultas;
-
-        return view('berkas.create',compact('id_fakultas'));
+        $jenis_berkas = JenisBerkas::where("status", "active")->get();
+        return view('berkas.create', compact('jenis_berkas'));
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request)
     {
-         if(Auth::guard('web')->check()){
-            if(Auth::user('web')->status == "viewer"){
-                return redirect()->route('dashboard.index');
-            }
-       }else{
-         return redirect()->route('dashboard.index');
-       }
-
-        $x = Auth::user('web')->id_lembaga;
-        $y = Auth::user('web')->id_fakultas;
-        $nama = Auth::user('web')->nama;
+        $save = $request->all();
+        $validator = Validator::make($save, [
+            'berkas' => 'mimes:pdf',
+        ],[
+            'mimes' => 'File Harus PDF'
+        ]);
+        if ($validator->fails()) {
+            return Redirect()->route('berkas.create')
+                ->withErrors($validator)
+                ->withInput();
+        }
+        $nama = Auth::guard("web")->user()->nama;
+        $id_unit = Auth::guard("web")->user()->id_unit;
         $extension = $request->file('berkas')->getClientOriginalExtension();
         $fileName = $this->quickRandom(26) . '.' . $extension;
-        $request->file('berkas')->move('berkas', $fileName);
-        $save['id_kategori_berkas'] = $request->id_kategori_berkas;
-        $save['id_sub_berkas'] = $request->id_sub_berkas;
-        $save['id_lembaga'] = Auth::user('web')->id_lembaga == null ? null : Auth::user('web')->id_lembaga;
-        $save['id_fakultas'] = Auth::user('web')->id_fakultas == null ? null : Auth::user('web')->id_fakultas;
-        $save['id_prodi'] = $request->id_prodi == null ? null : $request->id_prodi;
-        $save['nama_berkas'] = $request->nama_berkas;
-        $save['keterangan_berkas'] = $request->keterangan_berkas;
-        $save['status_berkas'] = $request->status_berkas;
+        $request->file('berkas')->move('document', $fileName);
         $save['berkas'] = $fileName;
-        if($x != null){
-            $one = DB::table('master_lembaga')->where('id_lembaga',$x)->first();
-            $save['create_date'] = date('Y-m-d H:i:s');
-            $save['create_by'] = $nama.'-'.$one->nama_lembaga;
-        }
-        if($y != null){
-            $one = DB::table('master_fakultas')->where('id_fakultas',$y)->first();
-            $save['create_date'] = date('Y-m-d H:i:s');
-            $save['create_by'] = $nama.'-'.$one->nama_fakultas;
-        }
-        berkas::create($save);
-        return redirect()->route('upload_berkas.index');
+        $save['id_unit'] = $id_unit;
+        $save["create_by"] =  $nama;
+        $save["create_date"] = date('Y-m-d H:i:s');
+        Berkas::create($save);
+        return Redirect()->route('berkas.index');
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function show($id)
     {
-         if(Auth::guard('web')->check()){
-            if(Auth::user('web')->status == "viewer"){
-                return redirect()->route('dashboard.index');
-            }
-       }else{
-         return redirect()->route('dashboard.index');
-       }
-
-        $one = DB::selectOne("SELECT berkas.*,
-        master_lembaga.id_lembaga, master_lembaga.nama_lembaga,
-        master_fakultas.id_fakultas, master_fakultas.nama_fakultas,
-        master_prodi.prodi_id,master_prodi.program_studi,
-        kategori_berkas.id_kategori_berkas,kategori_berkas.nama_kategori_berkas,
-        sub_berkas.id_sub_berkas,sub_berkas.nama_sub_berkas
-        FROM berkas
-        LEFT JOIN kategori_berkas on kategori_berkas.id_kategori_berkas = berkas.id_kategori_berkas
-        LEFT JOIN sub_berkas on sub_berkas.id_sub_berkas = berkas.id_sub_berkas
-        LEFT JOIN master_lembaga on master_lembaga.id_lembaga = berkas.id_lembaga
-        LEFT JOIN master_fakultas on master_fakultas.id_fakultas = berkas.id_fakultas
-        LEFT JOIN master_prodi on master_prodi.prodi_id = berkas.id_prodi
-        where  berkas.id_berkas = '$id' ");
+        $id_unit = Auth::guard("web")->user()->id_unit;
+        $one = ViewBerkas::where('id_unit', $id_unit)->where('id_berkas', $id)->first();
         return view('berkas.show', compact('one'));
     }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function edit($id)
     {
-         if(Auth::guard('web')->check()){
-            if(Auth::user('web')->status == "viewer"){
-                return redirect()->route('dashboard.index');
-            }
-       }else{
-         return redirect()->route('dashboard.index');
-       }
-
-        $id_fakultas = Auth::user('web')->id_fakultas;
-
-        $one = berkas::where('id_berkas', $id)->first();
-        return view('berkas.edit', compact('one', 'id','id_fakultas'));
+        $id_unit = Auth::guard("web")->user()->id_unit;
+        $one = ViewBerkas::where('id_unit', $id_unit)->where('id_berkas', $id)->first();
+        $jenis_berkas = JenisBerkas::where("status", "active")->get();
+        return view('berkas.edit', compact('one', 'jenis_berkas','id'));
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, $id)
     {
-         if(Auth::guard('web')->check()){
-            if(Auth::user('web')->status == "viewer"){
-                return redirect()->route('dashboard.index');
-            }
-       }else{
-         return redirect()->route('dashboard.index');
-       }
-
-        $x = Auth::user('web')->id_lembaga;
-        $y = Auth::user('web')->id_fakultas;
-        $nama = Auth::user('web')->nama;
-        $one = berkas::where('id_berkas', $id)->first();
-        if ($request->hasFile('foto')) {
+        $save = $request->all();
+        $validator = Validator::make($save, [
+            'berkas' => 'mimes:pdf',
+        ],[
+            'mimes' => 'File Harus PDF'
+        ]);
+        if ($validator->fails()) {
+            return Redirect()->route('berkas.edit',$id)
+                ->withErrors($validator)
+                ->withInput();
+        }
+        $nama = Auth::guard("web")->user()->nama;
+        $id_unit = Auth::guard("web")->user()->id_unit;
+        $one = berkas::where('id_berkas', $id)->select('berkas')->first();
+        if ($request->hasFile('berkas')) {
             if ($one->berkas != null) {
                 if ($request->berkas != $one->berkas) {
-                    $fotoxx = public_path("../berkas/") . $one->berkas;
-                    if (file_exists($fotoxx)) {
-                        unlink($fotoxx);
+                    $berkasxx = public_path("../document/") . $one->berkas;
+                    if (file_exists($berkasxx)) {
+                        unlink($berkasxx);
                     }
                 }
             }
+
             $extension = $request->file('berkas')->getClientOriginalExtension();
             $fileName = $this->quickRandom(26) . '.' . $extension;
-            $request->file('berkas')->move('berkas', $fileName);
-            $save['id_kategori_berkas'] = $request->id_kategori_berkas;
-            $save['id_sub_berkas'] = $request->id_sub_berkas;
-            $save['id_lembaga'] = Auth::user('web')->id_lembaga == null ? null : Auth::user('web')->id_lembaga;
-            $save['id_fakultas'] = Auth::user('web')->id_fakultas == null ? null : Auth::user('web')->id_fakultas;
-            $save['id_prodi'] = $request->id_prodi == null ? null : $request->id_prodi;
-            $save['nama_berkas'] = $request->nama_berkas;
-            $save['keterangan_berkas'] = $request->keterangan_berkas;
-            $save['status_berkas'] = $request->status_berkas;
+            $request->file('berkas')->move('document', $fileName);
             $save['berkas'] = $fileName;
-            $save['total_revisi'] = $one->total_revisi + 1;
-            if($x != null){
-                $one = DB::table('master_lembaga')->where('id_lembaga',$x)->first();
-                $save['update_date'] = date('Y-m-d H:i:s');
-                $save['update_by'] = $one->nama_lembaga;
-            }
-            if($y != null){
-                $one = DB::table('master_fakultas')->where('id_fakultas',$y)->first();
-                $save['update_date'] = date('Y-m-d H:i:s');
-                $save['update_by'] = $one->nama_fakultas;
-            }
-            berkas::where('id_berkas', $id)->update($save);
         } else {
-            $save['id_kategori_berkas'] = $request->id_kategori_berkas;
-            $save['id_sub_berkas'] = $request->id_sub_berkas;
-            $save['id_lembaga'] = Auth::user('web')->id_lembaga == null ? null : Auth::user('web')->id_lembaga;
-            $save['id_fakultas'] = Auth::user('web')->id_fakultas == null ? null : Auth::user('web')->id_fakultas;
-            $save['id_prodi'] = $request->id_prodi == null ? null : $request->id_prodi;
-            $save['nama_berkas'] = $request->nama_berkas;
-            $save['keterangan_berkas'] = $request->keterangan_berkas;
-            $save['status_berkas'] = $request->status_berkas;
-            $save['total_revisi'] = $one->total_revisi + 1;
-
-            if($x != null){
-                $one = DB::table('master_lembaga')->where('id_lembaga',$x)->first();
-                $save['update_date'] = date('Y-m-d H:i:s');
-                $save['update_by'] = $nama.'-'.$one->nama_lembaga;
-            }
-            if($y != null){
-                $one = DB::table('master_fakultas')->where('id_fakultas',$y)->first();
-                $save['update_date'] = date('Y-m-d H:i:s');
-                $save['update_by'] = $nama.'-'.$one->nama_fakultas;
-            }
-            berkas::where('id_berkas', $id)->update($save);
+            $save['berkas'] = $one->berkas;
         }
-        return redirect()->route('upload_berkas.index');
+        $save['id_unit'] = $id_unit;
+        $save["update_by"] =  $nama;
+        $save["update_date"] = date('Y-m-d H:i:s');
+        unset($save['_token']);
+        unset($save['_method']);
+        berkas::where('id_berkas', $id)->update($save);
+        return Redirect()->route('berkas.index');
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function destroy($id)
     {
-         if(Auth::guard('web')->check()){
-            if(Auth::user('web')->status == "viewer"){
-                return redirect()->route('dashboard.index');
-            }
-       }else{
-         return redirect()->route('dashboard.index');
-       }
-
         $x = berkas::where('id_berkas', $id)->first();
-        return $x->delete();
+        $berkasxx = public_path("../document/") . $x->berkas;
+        if (file_exists($berkasxx)) {
+            unlink($berkasxx);
+        }
+        $x->delete();
+        return response()->json(['status' => 'success']);
     }
 
+    public function edit_multi(Request $request)
+    {
+
+        foreach ($request->id_berkas as $row) {
+
+            $save["update_by"] =  Auth::guard("web")->user()->nama;
+            $save["update_date"] = date('Y-m-d H:i:s');
+            $save['status'] = $request->status;
+            Berkas::updateOrCreate(["id_berkas" => $row], $save);
+        }
+        return response()->json(['status' => 'success']);
+    }
     public static function quickRandom($length = 16)
     {
         $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
         return substr(str_shuffle(str_repeat($pool, 5)), 0, $length);
+    }
+    public function show_pdf($data)
+    {
+       $path = public_path("../document/") . $data;
+        if (!File::exists($path)) {
+            abort(404);
+        }
+        $file = File::get($path);
+        $type = File::mimeType($path);
+        $response = response()->make($file, 200);
+        $response->header("Content-Type", $type);
+        return $response;
     }
 }

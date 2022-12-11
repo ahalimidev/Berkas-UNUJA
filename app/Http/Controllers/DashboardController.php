@@ -2,196 +2,127 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\JenisBerkas;
+use App\Models\ViewBerkas;
+use App\Models\ViewSubBerkas;
+use App\Models\ViewUnit;
+use Carbon\Carbon;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Hash;
-use Yajra\DataTables\DataTables;
+use Yajra\DataTables\Facades\DataTables;
 
 class DashboardController extends Controller
 {
-    public function index()
-    {
-        return view('dashboard');
-    }
-    public function login()
-    {
-        return view('login');
-    }
-    public function login_login(Request $request)
-    {
-        $username = $request->username;
-        $password = $request->password;
-        $login = User::where('username', $username)->first();
-        if ($login != null) {
-            if (Hash::check($password, $login->password)) {
-                if (Auth::guard('web')->attempt(['username' => $username, 'password' => $password])) {
-                    return redirect()->intended(url("/"));
-                }
-            } else {
-                return Redirect()->route('auth.login')->withInput()->with('error', 'Username dan Password salah');
-            }
-        } else {
-            return Redirect()->route('auth.login')->withInput()->with('error', 'Username dan Password salah');
-        }
-    }
-    public function logout()
-    {
-        Auth::guard("web")->logout();
-        session()->flush();
-        return redirect()->route('dashboard.index');
-    }
-
-    public function master_lembaga(Request $req)
-    {
-        $all = DB::select("SELECT master_lembaga.nama_lembaga, COUNT(berkas.total_download) as download, count(berkas.id_berkas) as berkas FROM master_lembaga
-        LEFT JOIN berkas on master_lembaga.id_lembaga = berkas.id_lembaga
-        GROUP BY master_lembaga.id_lembaga");
-        if ($req->ajax()) {
-            return DataTables::of($all)->make(true);
-        }
-    }
-
-    public function master_lembaga_tahun(Request $req, $tahun)
-    {
-        $all = DB::select("SELECT master_lembaga.nama_lembaga, COUNT(berkas.total_download) as download, count(berkas.id_berkas) as berkas FROM master_lembaga
-        LEFT JOIN berkas on master_lembaga.id_lembaga = berkas.id_lembaga and year(berkas.create_date) = '$tahun'
-        GROUP BY master_lembaga.id_lembaga");
-        if ($req->ajax()) {
-            return DataTables::of($all)->make(true);
-        }
-    }
-
-
-    public function master_fakultas(Request $req)
-    {
-        $all = DB::select("SELECT master_fakultas.nama_fakultas, COUNT(berkas.total_download) as download, count(berkas.id_berkas) as berkas FROM master_fakultas
-        LEFT JOIN berkas on master_fakultas.id_fakultas = berkas.id_fakultas
-        GROUP BY master_fakultas.id_fakultas");
-        if ($req->ajax()) {
-            return DataTables::of($all)->make(true);
-        }
-    }
-
-    public function master_fakultas_tahun(Request $req, $tahun)
-    {
-        $all = DB::select("SELECT master_fakultas.nama_fakultas, COUNT(berkas.total_download) as download, count(berkas.id_berkas) as berkas FROM master_fakultas
-        LEFT JOIN berkas on master_fakultas.id_fakultas = berkas.id_fakultas and year(berkas.create_date) = '$tahun'
-        GROUP BY master_fakultas.id_fakultas");
-        if ($req->ajax()) {
-            return DataTables::of($all)->make(true);
-        }
-    }
-
-    public function download(Request $req)
-    {
+    public function index(Request $req){
         $pencarian = $req->query('q');
-        $id_kategori_berkas = $req->query('id_kategori_berkas');
-        $id_sub_berkas = $req->query('id_sub_berkas');
-        $pilih_kategori = $req->query('pilih_kategori');
-        $id_lembaga = $req->query('id_lembaga');
-        $id_fakultas = $req->query('id_fakultas');
-        $id_prodi = $req->query('id_prodi');
-        $login = Auth::guard('web')->check();
-
-        $kategori_berkas = $id_kategori_berkas == null ? "" : " AND berkas.id_kategori_berkas = '$id_kategori_berkas' ";
-        $sub_berkas = $id_sub_berkas == null ? "" : " AND berkas.id_sub_berkas = '$id_sub_berkas' ";
-        if ($pilih_kategori == null || $pilih_kategori == "" || $pilih_kategori == 0) {
-            $lembaga = "";
-            $fakultas = "";
-            $prodi = "";
-        } else if ($pilih_kategori == 1) {
-            $lembaga = $id_kategori_berkas == null ? "AND berkas.id_fakultas IS NOT NULL " : " AND berkas.id_lembaga = '$id_lembaga' ";
-            $fakultas = "";
-            $prodi = "";
-        } else if ($pilih_kategori == 2) {
-            $fakultas = $id_fakultas == null ? "AND berkas.id_fakultas IS NOT NULL " : " AND berkas.id_fakultas = '$id_fakultas' ";
-            $prodi = $id_prodi == null ? "" : " AND berkas.id_prodi = '$id_prodi' ";
-            $lembaga = "";
-        } else {
-            $lembaga = "";
-            $fakultas = "";
-            $prodi = "";
-        }
+        $jenis_berkas = $req->query('jenis_berkas');
+        $tanggal_awal =  $req->query('tanggal_awal');
+        $tanggal_akhir =  $req->query('tanggal_ahir');
+        $unit = $req->query('unit');
+        $status_berkas = $req->query('status_berkas');
         if ($pencarian == 'pencarian') {
-            $all = DB::select("SELECT berkas.nama_berkas,berkas.berkas,berkas.keterangan_berkas,berkas.status_berkas,master_lembaga.nama_lembaga, master_fakultas.nama_fakultas, master_prodi.program_studi FROM berkas
-            LEFT JOIN master_lembaga on master_lembaga.id_lembaga = berkas.id_lembaga
-            LEFT JOIN master_fakultas on master_fakultas.id_fakultas = berkas.id_fakultas
-            LEFT JOIN master_prodi on master_prodi.prodi_id = berkas.id_prodi where berkas.berkas is not null $kategori_berkas $sub_berkas $lembaga $fakultas $prodi");
+            $jenis_berkas = $jenis_berkas == "" ? "" : " AND id_jenis_berkas = '$jenis_berkas' ";
+            $status_berkas = $status_berkas == "" ? "" : " AND status_berkas = '$status_berkas' ";
+            if($tanggal_awal != "" && $tanggal_akhir != ""){
+                $tanggal = " AND date(create_date) BETWEEN '$tanggal_awal' AND '$tanggal_akhir' ";
+            }else{
+                $tanggal = "";
+            }
+            $unit = $unit == "" ? "" : " AND id_unit = '$unit' ";
+            $all = DB::select("SELECT * FROM v_berkas where status = 'active' $jenis_berkas $status_berkas $tanggal $unit");
             if ($req->ajax()) {
                 return DataTables::of($all)
                     ->addIndexColumn()
-                    ->editColumn('nama_berkas', function ($model) {
-                        return $model->nama_berkas . '#_#' . $model->berkas . '#_#' . $model->keterangan_berkas . '#_#' . $model->status_berkas;
-                    })
-                    ->addColumn('lembaga', function ($model) {
-                        return $model->nama_lembaga . '#_#' . $model->nama_fakultas . '#_#' . $model->program_studi;
-                    })
                     ->addColumn('action', function ($model) {
-                        return $model->berkas . '#_#' . $model->status_berkas;
+                        return  Crypt::encrypt($model->id_berkas);
+                    })
+                    ->editColumn('nama_berkas', function ($model) {
+                        return  $model->nama_berkas.'#_#'.Crypt::encrypt($model->id_berkas);
+                    })
+                    ->editColumn('create_date', function ($model) {
+                        return  $model->create_date == null ?  "" : Carbon::parse($model->create_date)->format('d/m/Y H:i:s');
+                    })
+                    ->editColumn('update_date', function ($model) {
+                        return  $model->update_date == null ?  "" : Carbon::parse($model->update_date)->format('d/m/Y H:i:s');
                     })
                     ->make(true);
             }
         }else{
-            $all = DB::select("SELECT berkas.nama_berkas,berkas.berkas,berkas.keterangan_berkas,berkas.status_berkas,master_lembaga.nama_lembaga, master_fakultas.nama_fakultas, master_prodi.program_studi FROM berkas
-            LEFT JOIN master_lembaga on master_lembaga.id_lembaga = berkas.id_lembaga
-            LEFT JOIN master_fakultas on master_fakultas.id_fakultas = berkas.id_fakultas
-            LEFT JOIN master_prodi on master_prodi.prodi_id = berkas.id_prodi where berkas.berkas is not null and berkas.status_berkas = 'y' ");
+            $all = ViewBerkas::where('status', 'active')->get();
             if ($req->ajax()) {
                 return DataTables::of($all)
                     ->addIndexColumn()
-                    ->editColumn('nama_berkas', function ($model) {
-                        return $model->nama_berkas . '#_#' . $model->berkas . '#_#' . $model->keterangan_berkas . '#_#' . $model->status_berkas;
-                    })
-                    ->addColumn('lembaga', function ($model) {
-                        return $model->nama_lembaga . '#_#' . $model->nama_fakultas . '#_#' . $model->program_studi;
-                    })
                     ->addColumn('action', function ($model) {
-                        return $model->berkas . '#_#' . $model->status_berkas;
+                        return  Crypt::encrypt($model->id_berkas);
+                    })
+                    ->editColumn('nama_berkas', function ($model) {
+                        return  $model->nama_berkas.'#_#'.Crypt::encrypt($model->id_berkas);
+                    })
+                    ->editColumn('create_date', function ($model) {
+                        return  $model->create_date == null ?  "" : Carbon::parse($model->create_date)->format('d/m/Y H:i:s');
+                    })
+                    ->editColumn('update_date', function ($model) {
+                        return  $model->update_date == null ?  "" : Carbon::parse($model->update_date)->format('d/m/Y H:i:s');
                     })
                     ->make(true);
             }
         }
 
-        return view('upload.download', compact('login'));
+        $unit = ViewUnit::select('id_unit','nama_unit')->where('status','active')->get();
+        $jenis_berkas = JenisBerkas::select('id_jenis_berkas','nama_jenis_berkas')->where('status','active')->get();
+
+        return view('download',compact('unit','jenis_berkas'));
     }
-    public function file($data)
+
+    public function show($id_berkas){
+        try {
+            $decrypted = Crypt::decrypt($id_berkas);
+            $one = ViewBerkas::where('id_berkas', $decrypted)->where('status', 'active')->first();
+            $all = ViewSubBerkas::where('id_berkas', $decrypted)->where('status', 'active')->get();
+            if($one->status_berkas == 'n'){
+                if(Auth::guard('web')->check()){
+                    return view('detail_download',compact('one','all'));
+                }else{
+                    return redirect()->route('auth.login');
+                }
+            }else{
+                return view('detail_download',compact('one','all'));
+            }
+        } catch (DecryptException $e) {
+            return view('errors.404');
+        }
+
+    }
+    public function download_pdf($data)
     {
 
         $x = DB::table('berkas')->select('nama_berkas')->where('berkas',$data)->first();
 
-        $path = public_path("../berkas/") . $data;
+        $path = public_path("../document/") . $data;
         if (!File::exists($path)) {
             abort(404);
         }
-        $file = File::get($path);
         $extension = File::extension($path);
 
         return response()->download($path,$x->nama_berkas.'.'.$extension);
 
-
-        $path = public_path("../berkas/") . $data;
-        if (!File::exists($path)) {
-            abort(404);
-        }
-        $file = File::get($path);
-        $type = File::mimeType($path);
-        $response = response()->make($file, 200);
-        $response->header("Content-Type", $type);
-        return $response;
     }
-
-    public function show_pdf($data)
+    public function sub_download_pdf($data)
     {
-       $path = public_path("../berkas/") . $data;
+
+        $x = DB::table('sub_berkas')->select('nama_sub_berkas')->where('sub_berkas',$data)->first();
+
+        $path = public_path("../document/") . $data;
         if (!File::exists($path)) {
             abort(404);
         }
-        $file = File::get($path);
-        $type = File::mimeType($path);
-        $response = response()->make($file, 200);
-        $response->header("Content-Type", $type);
+        $extension = File::extension($path);
+
+        return response()->download($path,$x->nama_berkas.'.'.$extension);
+
     }
 }

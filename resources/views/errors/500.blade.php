@@ -2,33 +2,13 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-	<title>PMB Universitas Nurul Jadid</title>
+	<title>Universitas Nurul Jadid</title>
 	<meta charset="utf-8" />
     <link rel="shortcut icon" href="{{ asset('assets/media/logos/favicon.ico') }}" type="image/x-icon">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,600,700" />
 	<link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
 	<link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <script type="text/javascript">
-        function callbackThen(response) {
-            response.json().then(function(data) {
-                if (data.success && data.score >= 0.6) {
-                    console.log('valid recaptcha');
-                } else {
-                    Swal.fire('Oops...', 'recaptcha error', 'error')
-                }
-            });
-        }
-        function callbackCatch(error) {
-            Swal.fire('Oops...', error, 'error')
-        }
-    </script>
-
-    {!! htmlScriptTagJsApi([
-        'callback_then' => 'callbackThen',
-        'callback_catch' => 'callbackCatch',
-    ]) !!}
 </head>
 
 <body id="kt_body" class="bg-body">

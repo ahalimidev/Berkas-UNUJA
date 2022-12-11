@@ -9,17 +9,19 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-    protected $guard = 'user';
     protected $table = "user";
     protected $primaryKey = "id_user";
     protected $fillable = [
         "id_user",
+        "id_unit",
         "nama",
         "username",
         "password",
+        "create_by",
+        "create_date",
+        "update_by",
+        "update_date",
         "status",
-        "id_lembaga",
-        "id_fakultas",
     ];
 
     public $timestamps = false;

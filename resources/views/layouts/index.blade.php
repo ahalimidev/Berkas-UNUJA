@@ -9,33 +9,34 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
     <link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
+    @yield('css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script type="text/javascript">
         function callbackThen(response) {
+            // read Promise object
             response.json().then(function(data) {
+                console.log(data);
                 if (data.success && data.score >= 0.6) {
                     console.log('valid recaptcha');
                 } else {
-                    Swal.fire('Oops...', 'recaptcha error', 'error')
+                    Swal.fire('Errors', 'Recaptcha Error', 'error')
                 }
             });
         }
 
         function callbackCatch(error) {
-            Swal.fire('Oops...', error, 'error')
+            console.error('Error:', error)
         }
     </script>
-
-    {!! htmlScriptTagJsApi([
+     {!! htmlScriptTagJsApi([
         'callback_then' => 'callbackThen',
         'callback_catch' => 'callbackCatch',
     ]) !!}
-    @yield('css')
 </head>
 
 <body id="kt_body"
     class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed"
-    style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px" oncontextmenu="return false;">
+    style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px">
     <div class="d-flex flex-column flex-root">
         <div class="page d-flex flex-row flex-column-fluid">
             @include('layouts.menu')
@@ -67,39 +68,6 @@
     <script src="{{ asset('assets/plugins/global/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
-    <script>
-        // disable right click
-        document.addEventListener('contextmenu', event => event.preventDefault());
-
-        document.onkeydown = function(e) {
-
-            if (e.keyCode == 123) {
-                e.preventDefault();
-                e.preventDefault();
-                return false;
-            }
-            if (e.ctrlKey && e.shiftKey && e.keyCode == "I".charCodeAt(0)) {
-                e.preventDefault();
-                return false;
-            }
-            if (e.ctrlKey && e.shiftKey && e.keyCode == "J".charCodeAt(0)) {
-                e.preventDefault();
-                return false;
-            }
-            if (e.ctrlKey && e.keyCode == "U".charCodeAt(0)) {
-                e.preventDefault();
-                return false;
-            }
-            if (e.ctrlKey && e.keyCode == "S".charCodeAt(0)) {
-                e.preventDefault();
-                return false;
-            }
-            if (e.ctrlKey && e.keyCode == "H".charCodeAt(0)) {
-                e.preventDefault();
-                return false;
-            }
-        }
-    </script>
     @yield('javascript')
 </body>
 

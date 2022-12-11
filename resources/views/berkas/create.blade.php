@@ -5,7 +5,7 @@
 @endsection
 
 @section('title-header')
-    <h3>Menambah Upload Berkas</h3>
+    <h3>Create Upload Berkas</h3>
 @endsection
 
 @section('content')
@@ -13,55 +13,31 @@
         <div class="card mb-5 mb-xl-8 border-2 shadow p-3 mb-5 bg-white rounded">
             <div class="card-header">
                 <h3 class="card-title align-items-start flex-column">
-                    <span class="card-label fw-bolder fs-3 mb-1">Menambahkan Upload Berkas</span>
+                    <span class="card-label fw-bolder fs-3 mb-1">Create Upload Berkas</span>
                 </h3>
 
             </div>
-            <form action="{{ route('upload_berkas.store') }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('berkas.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
-
                 <div class="card-body">
                     @include('errors.alert')
                     <div class="row justify-content-md-center">
                         <div class="align-content-center">
                             <div class="row">
-                                <div class="flex-column mb-8 fv-row col-sm-6" >
+                                <div class="flex-column mb-8 fv-row" >
                                     <!--begin::Label-->
                                     <label class="d-flex align-items-center fs-6 fw-bold mb-2 required">
-                                        <span>Kategori Berkas</span>
+                                        <span>Jenis Berkas</span>
                                     </label>
                                     <!--end::Label-->
                                     <select class="selectpicker form-control form-control-sm form-select-solid"
-                                        data-live-search="true" title="Kategori Berkas" id="id_kategori_berkas" name="id_kategori_berkas" required>
-
+                                        data-live-search="true" title="Jenis Berkas" id="id_jenis_berkas" name="id_jenis_berkas" required>
+                                        @foreach ($jenis_berkas as $item)
+                                            <option value="{{$item->id_jenis_berkas}}">{{$item->nama_jenis_berkas}}</option>
+                                        @endforeach
                                     </select>
 
                                 </div>
-                                <div class="flex-column mb-8 fv-row col-sm-6">
-                                    <!--begin::Label-->
-                                    <label class="d-flex align-items-center fs-6 fw-bold mb-2 required">
-                                        <span>Sub Kategori Berkas</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <select class="selectpicker form-control form-control-sm form-select-solid"
-                                        data-live-search="true" title="Sub Kategori Berkas" id="id_sub_berkas" name="id_sub_berkas" required>
-
-                                    </select>
-
-                                </div>
-                            </div>
-                            <div class="flex-column mb-8 fv-row" id="ll_prodi">
-                                <!--begin::Label-->
-                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">
-                                    <span>Program Studi</span>
-                                </label>
-                                <!--end::Label-->
-                                <select class="selectpicker form-control form-control-sm form-select-solid"
-                                    data-live-search="true" title="Program Studi" id="id_prodi" name="id_prodi">
-
-                                </select>
-
-                            </div>
                             <div class="d-flex flex-column mb-8 fv-row">
                                 <!--begin::Label-->
                                 <label class="d-flex align-items-center fs-6 fw-bold mb-2 required">
@@ -94,7 +70,7 @@
                                 </label>
                                 <!--end::Label-->
                                 <div class="row">
-                                    <div class="col-sm-12 col-md-12 col-lg-6 col-lx-4 col-lxx-3">
+                                    <div class="col-sm-12 col-md-12 col-lg-6 col-lx-4 col-lxx-3 p-2">
                                         <div class="form-check form-check-custom form-check-solid">
                                             <!--begin::Input-->
                                             <input class="form-check-input me-3" name="status_berkas" type="radio"
@@ -107,7 +83,7 @@
                                             <!--end::Label-->
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-12 col-lg-6 col-lx-4 col-lxx-3">
+                                    <div class="col-sm-12 col-md-12 col-lg-6 col-lx-4 col-lxx-3 p-2">
                                         <div class="form-check form-check-custom form-check-solid">
                                             <!--begin::Input-->
                                             <input class="form-check-input me-3" name="status_berkas" type="radio"
@@ -145,104 +121,6 @@
     <script src="{{ asset('assets/plugins/custom/select/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/custom/select/bootstrap-select.min.js') }}"></script>
     <script>
-        kategori();
-        $("#ll_prodi").hide();
-        if("{{$id_fakultas != null}}"){
-            prodi("{{$id_fakultas}}")
-            $("#ll_prodi").show();
-
-        }
-
-        $("#id_kategori_berkas").on("change", function() {
-            var xx = $("#id_kategori_berkas").find("option:selected").val()
-            console.log(xx);
-            if(xx != ""){
-                sub_kategori_berkas(xx)
-            }
-        });
-
-        function kategori() {
-            const x = new Promise((resolve, reject) => {
-                $.ajax({
-                    url: "{{ url('api/kategori_berkas') }}",
-                    dataType: 'json',
-                    success: function(data) {
-                        resolve(data)
-                    },
-                    error: function(error) {
-                        reject(error)
-                    },
-                });
-            });
-            x.then((data) => {
-                $("#id_kategori_berkas").empty();
-                $.each(data, function(index, item) {
-                    $("#id_kategori_berkas").append("<option value='" + item.id_kategori_berkas + "'>" + item.nama_kategori_berkas +"</option>");
-                });
-                $('.selectpicker').selectpicker('refresh');
-                $('.selectpicker').selectpicker('render');
-
-            }).catch(function(error) {
-                console.log(error);
-            });
-        }
-
-        function sub_kategori_berkas(id) {
-            const x = new Promise((resolve, reject) => {
-                $.ajax({
-                    url: "{{ url('api/sub_kategori_berkas') }}"+"/"+id,
-                    dataType: 'json',
-                    success: function(data) {
-                        resolve(data)
-                    },
-                    error: function(error) {
-                        reject(error)
-                    },
-                });
-            });
-            x.then((data) => {
-                console.log(data);
-
-                $("#id_sub_berkas").empty();
-                $.each(data, function(index, item) {
-                    $("#id_sub_berkas").append("<option value='" + item.id_sub_berkas + "'>" + item.nama_sub_berkas +"</option>");
-                });
-                $('.selectpicker').selectpicker('refresh');
-                $('.selectpicker').selectpicker('render');
-
-            }).catch(function(error) {
-                console.log(error);
-            });
-        }
-
-        function prodi(id) {
-            const x = new Promise((resolve, reject) => {
-                $.ajax({
-                    url: "{{ url('api/prodi') }}"+"/"+id,
-                    dataType: 'json',
-                    success: function(data) {
-                        resolve(data)
-                    },
-                    error: function(error) {
-                        reject(error)
-                    },
-                });
-            });
-            x.then((data) => {
-                $("#id_prodi").empty();
-                $("#id_prodi").append('<option value="">All Data</option>');
-                $.each(data, function(index, item) {
-                    $("#id_prodi").append("<option value='" + item.prodi_id + "'>" + item
-                        .program_studi + "</option>");
-                });
-                $('.selectpicker').selectpicker('refresh');
-                $('.selectpicker').selectpicker('render');
-
-            }).catch(function(error) {
-                console.log(error);
-            });
-        }
-
         window.onbeforeunload = function() {
             $("button[type=submit]").prop("disabled", "disabled");
         }

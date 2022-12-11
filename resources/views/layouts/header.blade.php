@@ -1,4 +1,4 @@
-<div id="kt_header" style="" class="header align-items-stretch">
+<div id="kt_header" class="header align-items-stretch">
     <div class="container-fluid d-flex align-items-stretch justify-content-between">
         <div class="d-flex align-items-center d-lg-none ms-n3 me-1" title="Show aside menu">
             <div class="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px"
@@ -22,7 +22,7 @@
         <div class="d-flex align-items-stretch justify-content-between flex-lg-grow-1">
             <div class="d-flex align-items-stretch flex-shrink-0">
                 <div class="d-flex align-items-stretch flex-shrink-0">
-                    <div class="row mt-5">
+                    <div class="row mt-6">
                         @yield('title-header')
                     </div>
                 </div>
@@ -39,10 +39,9 @@
                             data-kt-menu="true">
                             <div class="menu-item px-5">
                                 @if (Auth::guard('web')->check())
-                                <a href="{{ route('auth.logout') }}" lass="menu-link px-5">Keluar Aplikaasi</a>
-
+                                    <a class="menu-link px-5" href="{{ route('auth.logout') }}">Keluar Aplikaasi</a>
                                 @else
-                                 <a href="{{ route('auth.login') }}" lass="menu-link px-5">Masuk Aplikaasi</a>
+                                    <a class="menu-link px-5" href="{{ route('auth.login') }}">Login Aplikaasi</a>
                                 @endif
                             </div>
                         </div>
