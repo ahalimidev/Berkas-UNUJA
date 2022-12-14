@@ -175,10 +175,44 @@ class UserController extends Controller
             return Redirect()->route('auth.login')->withInput()->with('error', 'Username dan Password salah');
         }
     }
+
     public function logout()
     {
         Auth::guard("web")->logout();
         session()->flush();
         return redirect()->route('dashboard.index');
+    }
+
+    public function tampil_pengaturan(){
+        $id = Auth::guard("web")->user()->id_user;
+        $one = ViewUser::where('id_user',$id)->first();
+        return view('setting',compact('one'));
+    }
+    public function simpan_pengaturan(Request $request){
+        $id = Auth::guard("web")->user()->id_user;
+        $y = User::where('id_user',$id)->first();
+        $x = User::where('username',$request->username)->first();
+        if($x != null){
+            if($x->username != $y->username){
+                return Redirect()->route('user.setting')->withInput()->with('error', 'Username '.$request->username.' sudah ada');
+            }
+        }
+        if($request->password != ""){
+            User::find($id)->update([
+                'nama' => $request->nama,
+                'username' => $request->username,
+                'update_by' => Auth::guard("web")->user()->nama,
+                'update_date' => date('Y-m-d H:i:s'),
+                'password' =>  bcrypt($request->password),
+            ]);
+        }else{
+            User::find($id)->update([
+                'nama' => $request->nama,
+                'username' => $request->username,
+                'update_by' => Auth::guard("web")->user()->nama,
+                'update_date' => date('Y-m-d H:i:s'),
+            ]);
+        }
+        return Redirect()->route('user.setting')->with('success', 'Berhasil Disimpan');
     }
 }

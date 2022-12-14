@@ -12,6 +12,7 @@ Route::get('/',[DashboardController::class,'index'])->name('dashboard.index');
 Route::get('/show/{id_berkas}',[DashboardController::class,'show'])->name('dashboard.show');
 Route::get('/download/{data}',[DashboardController::class,'download_pdf'])->name('download.pdf');
 Route::get('/sub/download/{data}',[DashboardController::class,'sub_download_pdf'])->name('sub.download.pdf');
+Route::get('/viewer/berkas/{data}',[DashboardController::class,'show_pdf'])->name('viewers.pdf');
 
 Route::get("/login",[UserController::class,'form_login'])->name('auth.login');
 Route::post("/login",[UserController::class,'akses_login'])->name('auth.login.login');
@@ -23,6 +24,8 @@ Route::middleware(['auth:web'])->group(function () {
 
     Route::resource('user', UserController::class);
     Route::post('user/edit/all', [UserController::class, 'edit_multi'])->name('user.edit.all');
+    Route::get('pengaturan', [UserController::class, 'tampil_pengaturan'])->name('user.setting');
+    Route::post('pengaturan', [UserController::class, 'simpan_pengaturan'])->name('user.setting.simpan');
 
     Route::resource('berkas', BerkasController::class);
     Route::post('berkas/edit/all', [BerkasController::class, 'edit_multi'])->name('berkas.edit.all');

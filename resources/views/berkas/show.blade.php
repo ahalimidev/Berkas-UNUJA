@@ -25,7 +25,7 @@
                             <div class="d-flex flex-column mb-8 fv-row col-sm-4">
                                 <!--begin::Label-->
                                 <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
-                                    <span>Nama Unit</span>
+                                    <span>Unit</span>
                                 </label>
                                 <!--end::Label-->
                                 <input type="text" class="form-control form-control-sm " value="{{ $one->nama_unit }}"
@@ -34,7 +34,7 @@
                             <div class="d-flex flex-column mb-8 fv-row col-sm-4">
                                 <!--begin::Label-->
                                 <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
-                                    <span>Nama Struktur</span>
+                                    <span>Struktur</span>
                                 </label>
                                 <!--end::Label-->
                                 <input type="text" class="form-control form-control-sm "

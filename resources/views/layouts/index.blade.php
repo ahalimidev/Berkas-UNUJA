@@ -19,7 +19,7 @@
                 if (data.success && data.score >= 0.6) {
                     console.log('valid recaptcha');
                 } else {
-                    Swal.fire('Errors', 'Recaptcha Error', 'error')
+                    console.log('Error recaptcha');
                 }
             });
         }

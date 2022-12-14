@@ -46,7 +46,7 @@
                                 <div class="d-flex flex-column mb-8 fv-row col-sm-4">
                                     <!--begin::Label-->
                                     <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
-                                        <span>Nama Unit</span>
+                                        <span>Unit</span>
                                     </label>
                                     <!--end::Label-->
                                     <p id="nama_unit"></p>
@@ -55,7 +55,7 @@
                                 <div class="d-flex flex-column mb-8 fv-row col-sm-4">
                                     <!--begin::Label-->
                                     <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
-                                        <span>Nama Struktur</span>
+                                        <span>Struktur</span>
                                     </label>
                                     <!--end::Label-->
                                     <p id="nama_struktur"></p>

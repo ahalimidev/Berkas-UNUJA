@@ -32,7 +32,7 @@
                             <div class="d-flex flex-column mb-8 fv-row col-sm-4">
                                 <!--begin::Label-->
                                 <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
-                                    <span>Nama Unit</span>
+                                    <span>Unit</span>
                                 </label>
                                 <!--end::Label-->
                                 <p>{{$one->nama_unit}}</p>
@@ -41,7 +41,7 @@
                             <div class="d-flex flex-column mb-8 fv-row col-sm-4">
                                 <!--begin::Label-->
                                 <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
-                                    <span>Nama Struktur</span>
+                                    <span>Struktur</span>
                                 </label>
                                 <!--end::Label-->
                                 <p>{{$one->nama_struktur}}</p>
@@ -86,7 +86,7 @@
                             <div class="d-flex flex-column mb-8 fv-row">
                                 <!--begin::Label-->
                                 <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
-                                    <span>Sub Nama Unit</span>
+                                    <span>Sub Unit</span>
                                 </label>
                                 <!--end::Label-->
                                 <input type="text" value="{{$one->sub_nama_unit}}" class="form-control form-control-sm "
@@ -95,7 +95,7 @@
                             <div class="d-flex flex-column mb-8 fv-row">
                                 <!--begin::Label-->
                                 <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
-                                    <span>Sub Nama Struktur</span>
+                                    <span>Sub Struktur</span>
                                 </label>
                                 <!--end::Label-->
                                 <input type="text" value="{{$one->sub_nama_struktur}}" class="form-control form-control-sm "

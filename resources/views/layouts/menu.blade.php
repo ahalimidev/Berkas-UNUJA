@@ -68,6 +68,15 @@
                                 <span class="menu-title">Pengguna</span>
                             </a>
                         </div>
+                    @else
+                        <div class="menu-item">
+                            <a class="menu-link" href="{{ route('user.setting') }}">
+                                <span class="menu-icon">
+                                    <i class="bi bi-person"></i>
+                                </span>
+                                <span class="menu-title">Pengaturan</span>
+                            </a>
+                        </div>
                     @endif
 
                 @endif

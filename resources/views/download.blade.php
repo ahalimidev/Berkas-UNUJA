@@ -24,7 +24,7 @@
                         <!--end::Label-->
                         <select class="selectpicker form-control form-control-sm form-select-solid" data-live-search="true"
                             title="Jenis Berkas" id="id_jenis_berkas" name="id_jenis_berkas">
-                            <option value="" selected></option>
+                            <option value="" selected>Semua Jenis Berkas</option>
                             @foreach ($jenis_berkas as $item)
                                 <option value="{{ $item->id_jenis_berkas }}">{{ $item->nama_jenis_berkas }}</option>
                             @endforeach
@@ -38,7 +38,7 @@
                         <!--end::Label-->
                         <select class="selectpicker form-control form-control-sm form-select-solid" data-live-search="true"
                             title="Unit" id="unit" name="unit">
-                            <option value="" selected></option>
+                            <option value="" selected>Semua Unit</option>
                             @foreach ($unit as $item)
                                 <option value="{{ $item->id_unit }}">{{ $item->nama_unit }}</option>
                             @endforeach
@@ -70,23 +70,20 @@
                         <!--end::Label-->
                         <select class="selectpicker form-control form-control-sm form-select-solid" data-live-search="true"
                             title="Status Berkas" id="status_berkas">
-                            <option value="" selected></option>
+                            <option value="" selected>Semua Status Berkas</option>
                             <option value="n">Private</option>
                             <option value="y">Publik</option>
                         </select>
                     </div>
-
-                    <div class="flex-column mb-2 fv-row col-sm-3">
-                        <button type="button" class="btn btn-primary btn-sm mt-9 w-100" id="btn_filter">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                class="bi bi-filter" viewBox="0 0 16 16">
-                                <path
-                                    d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z">
-                                </path>
-                            </svg>
-                            Filter
-                        </button>
-                    </div>
+                    <button type="button" class="btn btn-primary btn-sm m-3 w-100px" id="btn_filter">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-filter" viewBox="0 0 16 16">
+                            <path
+                                d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z">
+                            </path>
+                        </svg>
+                        Filter
+                    </button>
                 </div>
                 <div class="table-responsive">
                     <table id="example" class="nowrap table" style="width:100%">
