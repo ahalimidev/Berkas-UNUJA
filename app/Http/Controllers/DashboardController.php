@@ -21,7 +21,7 @@ class DashboardController extends Controller
         $pencarian = $req->query('q');
         $jenis_berkas = $req->query('jenis_berkas');
         $tanggal_awal =  $req->query('tanggal_awal');
-        $tanggal_akhir =  $req->query('tanggal_ahir');
+        $tanggal_akhir =  $req->query('tanggal_akhir');
         $unit = $req->query('unit');
         $status_berkas = $req->query('status_berkas');
         if ($pencarian == 'pencarian') {

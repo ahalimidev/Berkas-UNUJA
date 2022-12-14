@@ -7,7 +7,7 @@
 @endsection
 
 @section('title-header')
-    <h3>List User</h3>
+    <h3>Daftar Pengguna</h3>
 @endsection
 
 @section('content')
@@ -15,27 +15,27 @@
         <div class="card mb-xl-8 mb-5 border-2">
             <div class="card-header">
                 <h3 class="card-title align-items-start flex-column">
-                    <span class="card-label fw-bolder fs-3 mb-1">List User</span>
+                    <span class="card-label fw-bolder fs-3 mb-1">Daftar Pengguna</span>
                 </h3>
                 <div class="card-toolbar">
                     <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
                         <a type="button" class="btn btn-sm btn-primary w-150px"
-                            href="{{ route('user.create') }}">Add User</a>
+                            href="{{ route('user.create') }}">Tambah Pengguna</a>
                     </div>
                 </div>
             </div>
             <div class="card-body py-3">
                 <div class="text-muted mb-3">
-                    On this page is used to add, edit, and detail User
+                    Pada halaman ini digunakan untuk tambah, pembaruan,tampil ke Pengguna
                 </div>
                 <div class="notice d-flex bg-light-primary border-primary mb-3 rounded border border-dashed p-3">
                     <div class="d-flex flex-stack">
                         <div>
-                            <div class="fs-12 text-gray-700">Following is the list of User data.
+                            <div class="fs-12 text-gray-700">Following is the list of Pengguna data.
                             </div>
                             <div class="fs-12 text-gray-700">
-                                <div style="color: #d80000; font-weight: 500;">Data User is block</div>
-                                <div style="color: #008c46 ; font-weight: 500;">Data User is active</div>
+                                <div style="color: #d80000; font-weight: 500;">Data Pengguna is block</div>
+                                <div style="color: #008c46 ; font-weight: 500;">Data Pengguna is active</div>
                             </div>
                         </div>
                     </div>
@@ -52,7 +52,7 @@
                                     </div>
                                 </th>
                                 <th class="w-100px text-center">Actions</th>
-                                <th class="w-100px text-center">Name</th>
+                                <th class="w-100px text-center">Nama</th>
                                 <th class="w-100px text-center">Unit</th>
                                 <th class="w-100px text-center">Username</th>
                                 <th class="w-100px text-center">Password</th>
@@ -326,8 +326,8 @@
                         dataType: 'json',
                         success: function(data) {
                             Swal.fire({
-                                title: 'User',
-                                text: "Saved successfully",
+                                title: 'Pengguna',
+                                text: "Berhasil disimpan",
                                 icon: 'success',
                                 confirmButtonColor: '#3085d6',
                                 confirmButtonText: 'ok',
@@ -340,7 +340,7 @@
                         },
                         error: function(error) {
                             $("#active").prop("disabled", false);
-                            Swal.fire('User', 'failed to approvel', 'error')
+                            Swal.fire('User', "Gagal disimpan", 'error')
                         }
                     })
                 }
@@ -361,8 +361,8 @@
                         dataType: 'json',
                         success: function(data) {
                             Swal.fire({
-                                title: 'User',
-                                text: "Saved successfully",
+                                title: 'Pengguna',
+                                text: "Berhasil disimpan",
                                 icon: 'success',
                                 confirmButtonColor: '#3085d6',
                                 confirmButtonText: 'ok',
@@ -375,7 +375,7 @@
                         },
                         error: function(error) {
                             $("#block").prop("disabled", false);
-                            Swal.fire('User', 'failed to approvel', 'error')
+                            Swal.fire('User', "Gagal disimpan", 'error')
                         }
                     })
                 }
@@ -384,14 +384,14 @@
 
         function deleteConfirmation(user) {
             Swal.fire({
-                title: 'Are you sure?',
-                text: "It will be deleted permanently!",
+                title: 'Apa kamu yakin?',
+                text: "Ini akan dihapus secara permanen!",
                 icon: 'warning',
                 confirmButtonColor: '#3085d6',
                 allowOutsideClick: false,
                 showCancelButton: true,
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!',
+                confirmButtonText: 'Ya, hapus!',
             }).then((result) => {
                 if (result.value) {
                     var destroy = '{{ route('user.destroy', [':user']) }}';
@@ -403,15 +403,11 @@
                             "_token": "{{ csrf_token() }}"
                         },
                         success: function(data) {
-                            if (data == 1 || data == 0) {
-                                Swal.fire('Deleted!', 'Your file has been deleted.', 'success')
-                                window.location.reload();
-                            } else {
-                                Swal.fire('Permission', 'You do not have access delete !', 'error')
-                            }
+                            Swal.fire('Deleted!', 'Berhasil dihapus', 'success')
+                            window.location.reload();
                         },
                         error: function(error) {
-                            Swal.fire('Oops...', 'Something went wrong with delete !', 'error')
+                            Swal.fire('Oops...', 'Gagal dihapus', 'error')
 
                         }
                     });

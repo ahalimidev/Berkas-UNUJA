@@ -7,7 +7,7 @@
 @endsection
 
 @section('title-header')
-    <h3>List Jenis Berkas</h3>
+    <h3>Daftar Jenis Berkas</h3>
 @endsection
 
 @section('content')
@@ -15,18 +15,18 @@
         <div class="card mb-xl-8 mb-5 border-2">
             <div class="card-header">
                 <h3 class="card-title align-items-start flex-column">
-                    <span class="card-label fw-bolder fs-3 mb-1">List Jenis Berkas</span>
+                    <span class="card-label fw-bolder fs-3 mb-1">Daftar Jenis Berkas</span>
                 </h3>
                 <div class="card-toolbar">
                     <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
                         <a type="button" class="btn btn-sm btn-primary w-150px"
-                            href="{{ route('jenis_berkas.create') }}">Add Jenis Berkas</a>
+                            href="{{ route('jenis_berkas.create') }}">Tambah Jenis Berkas</a>
                     </div>
                 </div>
             </div>
             <div class="card-body py-3">
                 <div class="text-muted mb-3">
-                    On this page is used to add, edit, and detail Jenis Berkas
+                    Pada halaman ini digunakan untuk tambah, pembaruan,tampil ke Jenis Berkas
                 </div>
                 <div class="notice d-flex bg-light-primary border-primary mb-3 rounded border border-dashed p-3">
                     <div class="d-flex flex-stack">
@@ -312,7 +312,7 @@
                         success: function(data) {
                             Swal.fire({
                                 title: 'Jenis Berkas',
-                                text: "Saved successfully",
+                                text: "Berhasil disimpan",
                                 icon: 'success',
                                 confirmButtonColor: '#3085d6',
                                 confirmButtonText: 'ok',
@@ -325,7 +325,7 @@
                         },
                         error: function(error) {
                             $("#active").prop("disabled", false);
-                            Swal.fire('Jenis Berkas', 'failed to approvel', 'error')
+                            Swal.fire('Jenis Berkas', "Gagal disimpan", 'error')
                         }
                     })
                 }
@@ -347,7 +347,7 @@
                         success: function(data) {
                             Swal.fire({
                                 title: 'Jenis Berkas',
-                                text: "Saved successfully",
+                                text: "Berhasil disimpan",
                                 icon: 'success',
                                 confirmButtonColor: '#3085d6',
                                 confirmButtonText: 'ok',
@@ -360,7 +360,7 @@
                         },
                         error: function(error) {
                             $("#block").prop("disabled", false);
-                            Swal.fire('Jenis Berkas', 'failed to approvel', 'error')
+                            Swal.fire('Jenis Berkas', "Gagal disimpan", 'error')
                         }
                     })
                 }
@@ -369,14 +369,14 @@
 
         function deleteConfirmation(jenis_berkas) {
             Swal.fire({
-                title: 'Are you sure?',
-                text: "It will be deleted permanently!",
+                title: 'Apa kamu yakin?',
+                text: "Ini akan dihapus secara permanen!",
                 icon: 'warning',
                 confirmButtonColor: '#3085d6',
                 allowOutsideClick: false,
                 showCancelButton: true,
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!',
+                confirmButtonText: 'Ya, hapus!',
             }).then((result) => {
                 if (result.value) {
                     var destroy = '{{ route('jenis_berkas.destroy', [':jenis_berkas']) }}';
@@ -388,15 +388,11 @@
                             "_token": "{{ csrf_token() }}"
                         },
                         success: function(data) {
-                            if (data == 1 || data == 0) {
-                                Swal.fire('Deleted!', 'Your file has been deleted.', 'success')
-                                window.location.reload();
-                            } else {
-                                Swal.fire('Permission', 'You do not have access delete !', 'error')
-                            }
+                            Swal.fire('Deleted!', 'Berhasil dihapus', 'success')
+                            window.location.reload();
                         },
                         error: function(error) {
-                            Swal.fire('Oops...', 'Something went wrong with delete !', 'error')
+                            Swal.fire('Oops...', 'Gagal dihapus', 'error')
 
                         }
                     });

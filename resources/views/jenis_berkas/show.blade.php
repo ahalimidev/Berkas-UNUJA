@@ -4,7 +4,7 @@
 @endsection
 
 @section('title-header')
-    <h3>Show Jenis Berkas</h3>
+    <h3>Tampil Jenis Berkas</h3>
 @endsection
 
 @section('content')
@@ -12,7 +12,7 @@
         <div class="card mb-xl-8 mb-5 border-2">
             <div class="card-header">
                 <h3 class="card-title align-items-start flex-column">
-                    <span class="card-label fw-bolder fs-3 mb-1">Show Jenis Berkas</span>
+                    <span class="card-label fw-bolder fs-3 mb-1">Tampil Jenis Berkas</span>
                 </h3>
 
             </div>
@@ -67,7 +67,7 @@
                         </div>
                         <div class="text-center">
                             <a class="btn btn-sm btn-bg-success w-100px text-white" href="{{ route('jenis_berkas.index') }}">
-                                <span class="indicator-label">Go Back</span>
+                                <span class="indicator-label">Kembali</span>
                             </a>
                         </div>
                     </div>

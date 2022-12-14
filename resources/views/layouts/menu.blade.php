@@ -37,7 +37,7 @@
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>
-                                    <span class="menu-title">Berkas Utama</span>
+                                    <span class="menu-title">Berkas</span>
                                 </a>
                             </div>
                             <div class="menu-item">
@@ -65,7 +65,7 @@
                                 <span class="menu-icon">
                                     <i class="bi bi-person"></i>
                                 </span>
-                                <span class="menu-title">User</span>
+                                <span class="menu-title">Pengguna</span>
                             </a>
                         </div>
                     @endif

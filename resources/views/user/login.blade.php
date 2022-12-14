@@ -54,7 +54,7 @@
 
                         <div class="mb-5 text-center">
                             <!--begin::Title-->
-                            <h3 class="text-dark mb-8">Apliaski Aturan Universistas Nurul Jadid</h3>
+                            <h3 class="text-dark mb-8">Apliaski Peraturan Universistas Nurul Jadid</h3>
                         </div>
                         <div class="fv-row mb-5">
                             <label class="form-label fs-6 fw-bolder text-dark">Username</label>

@@ -103,8 +103,10 @@ class UserController extends Controller
     {
         $y = User::where('id_user',$id)->first();
         $x = User::where('username',$request->username)->first();
-        if($x->username != $y->username){
-            return Redirect()->route('user.edit',['user' => $id])->withInput()->with('error', 'Username '.$request->username.' sudah ada');
+        if($x != null){
+            if($x->username != $y->username){
+                return Redirect()->route('user.edit',['user' => $id])->withInput()->with('error', 'Username '.$request->username.' sudah ada');
+            }
         }
         if($request->password != ""){
             User::find($id)->update([

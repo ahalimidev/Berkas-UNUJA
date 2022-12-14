@@ -6,9 +6,8 @@
     <link rel="stylesheet" href="{{ asset('assets/plugins/custom/datatables/buttons.dataTables.min.css') }}">
 @endsection
 
-@section('list')
-<li class="breadcrumb-item text-gray-800">Sub Sub Berkas</li>
-<li class="text-gray-800">List Sub Berkas</li>
+@section('title-header')
+<h3>Daftar Sub Berkas</h3>
 @endsection
 
 @section('content')
@@ -16,18 +15,18 @@
         <div class="card mb-xl-8 mb-5 border-2">
             <div class="card-header">
                 <h3 class="card-title align-items-start flex-column">
-                    <span class="card-label fw-bolder fs-3 mb-1">List Sub Berkas</span>
+                    <span class="card-label fw-bolder fs-3 mb-1">Daftar Sub Berkas</span>
                 </h3>
                 <div class="card-toolbar">
                     <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
                         <a type="button" class="btn btn-sm btn-primary w-150px"
-                            href="{{ route('sub_berkas.create') }}">Add Sub Berkas</a>
+                            href="{{ route('sub_berkas.create') }}">Tambah Sub Berkas</a>
                     </div>
                 </div>
             </div>
             <div class="card-body py-3">
                 <div class="text-muted mb-3">
-                    On this page is used to add, edit, and detail Sub Berkas
+                    Pada halaman ini digunakan untuk tambah, pembaruan,tampil ke Sub Berkas
                 </div>
                 <div class="notice d-flex bg-light-primary border-primary mb-3 rounded border border-dashed p-3">
                     <div class="d-flex flex-stack">
@@ -328,7 +327,7 @@
                         success: function(data) {
                             Swal.fire({
                                 title: 'sub berkas',
-                                text: "Saved successfully",
+                                text: "Berhasil disimpan",
                                 icon: 'success',
                                 confirmButtonColor: '#3085d6',
                                 confirmButtonText: 'ok',
@@ -341,7 +340,7 @@
                         },
                         error: function(error) {
                             $("#active").prop("disabled", false);
-                            Swal.fire('sub_berkas', 'failed to approvel', 'error')
+                            Swal.fire('sub_berkas', "Gagal disimpan", 'error')
                         }
                     })
                 }
@@ -363,7 +362,7 @@
                         success: function(data) {
                             Swal.fire({
                                 title: 'sub berkas',
-                                text: "Saved successfully",
+                                text: "Berhasil disimpan",
                                 icon: 'success',
                                 confirmButtonColor: '#3085d6',
                                 confirmButtonText: 'ok',
@@ -376,7 +375,7 @@
                         },
                         error: function(error) {
                             $("#block").prop("disabled", false);
-                            Swal.fire('sub_berkas', 'failed to approvel', 'error')
+                            Swal.fire('sub_berkas', "Gagal disimpan", 'error')
                         }
                     })
                 }
@@ -385,14 +384,14 @@
 
         function deleteConfirmation(sub_berkas) {
             Swal.fire({
-                title: 'Are you sure?',
-                text: "It will be deleted permanently!",
+                title: 'Apa kamu yakin?',
+                text: "Ini akan dihapus secara permanen!",
                 icon: 'warning',
                 confirmButtonColor: '#3085d6',
                 allowOutsideClick: false,
                 showCancelButton: true,
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!',
+                confirmButtonText: 'Ya, hapus!',
             }).then((result) => {
                 if (result.value) {
                     var destroy = '{{ route('sub_berkas.destroy', [':sub_berkas']) }}';
@@ -404,11 +403,11 @@
                             "_token": "{{ csrf_token() }}"
                         },
                         success: function(data) {
-                            Swal.fire('Deleted!', 'Your file has been deleted.', 'success')
+                            Swal.fire('Deleted!', 'Berhasil dihapus', 'success')
                             window.location.reload();
                         },
                         error: function(error) {
-                            Swal.fire('Oops...', 'Something went wrong with delete !', 'error')
+                            Swal.fire('Oops...', 'Gagal dihapus', 'error')
 
                         }
                     });
