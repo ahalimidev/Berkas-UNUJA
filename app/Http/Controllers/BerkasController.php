@@ -29,6 +29,9 @@ class BerkasController extends Controller
                 ->addColumn('cek', function ($model) {
                     return  $model->id_berkas;
                 })
+                ->editColumn('status_spmi', function ($model) {
+                    return  $model->status_spmi == 'n' ? 'Tidak' : 'Ya';
+                })
                 ->addColumn('action', function ($model) {
                     return  $model->id_berkas;
                 })
@@ -44,8 +47,8 @@ class BerkasController extends Controller
      */
     public function create()
     {
-        $jenis_berkas = JenisBerkas::where("status", "active")->get();
-        return view('berkas.create', compact('jenis_berkas'));
+
+        return view('berkas.create');
     }
 
     /**
@@ -58,9 +61,9 @@ class BerkasController extends Controller
     {
         $save = $request->all();
         $validator = Validator::make($save, [
-            'berkas' => 'mimes:pdf',
+            'berkas' => 'mimes:pdf,docx,doc,zip',
         ],[
-            'mimes' => 'File Harus PDF'
+            'mimes' => 'File harus pdf, docx, doc atau zip'
         ]);
         if ($validator->fails()) {
             return Redirect()->route('berkas.create')
@@ -103,8 +106,8 @@ class BerkasController extends Controller
     {
         $id_unit = Auth::guard("web")->user()->id_unit;
         $one = ViewBerkas::where('id_unit', $id_unit)->where('id_berkas', $id)->first();
-        $jenis_berkas = JenisBerkas::where("status", "active")->get();
-        return view('berkas.edit', compact('one', 'jenis_berkas','id'));
+
+        return view('berkas.edit', compact('one', 'id'));
     }
 
     /**
@@ -118,9 +121,9 @@ class BerkasController extends Controller
     {
         $save = $request->all();
         $validator = Validator::make($save, [
-            'berkas' => 'mimes:pdf',
+            'berkas' => 'mimes:pdf,docx,doc,zip',
         ],[
-            'mimes' => 'File Harus PDF'
+            'mimes' => 'File harus pdf, docx, doc atau zip'
         ]);
         if ($validator->fails()) {
             return Redirect()->route('berkas.edit',$id)
@@ -190,6 +193,11 @@ class BerkasController extends Controller
         $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
         return substr(str_shuffle(str_repeat($pool, 5)), 0, $length);
+    }
+
+    public function jenis_berkas($status){
+        $jenis_berkas = JenisBerkas::where("status", "active")->where("status_spmi", $status)->get();
+        return $jenis_berkas;
     }
     public function show_pdf($data)
     {

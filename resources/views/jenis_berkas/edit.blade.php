@@ -33,6 +33,41 @@
                                     class="form-control form-control-sm" value="{{ $one->nama_jenis_berkas }}"
                                     required />
                             </div>
+                            <div class="d-flex flex-column mb-8 fv-row">
+                                <!--begin::Label-->
+                                <label class="d-flex align-items-center fs-7 fw-bold mb-3 required">
+                                    <span>Standar SPMI</span>
+                                </label>
+                                <!--end::Label-->
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-12 col-lg-6 col-lx-4 col-lxx-3 p-2">
+                                        <div class="form-check form-check-custom form-check-solid">
+                                            <!--begin::Input-->
+                                            <input class="form-check-input me-3" name="status_spmi" type="radio"
+                                                value="y" id="kt_modal_update_role_option_11"  {{ $one->status_spmi == 'y' ? 'checked' : '' }} required>
+                                            <!--end::Input-->
+                                            <!--begin::Label-->
+                                            <label class="form-check-label" for="kt_modal_update_role_option_11">
+                                                <div class="fw-bolder text-gray-800">Aktif</div>
+                                            </label>
+                                            <!--end::Label-->
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-6 col-lx-4 col-lxx-3 p-2">
+                                        <div class="form-check form-check-custom form-check-solid">
+                                            <!--begin::Input-->
+                                            <input class="form-check-input me-3" name="status_spmi" type="radio"
+                                                value="n" id="kt_modal_update_role_option_22" {{ $one->status_spmi == 'n' ? 'checked' : '' }} required>
+                                            <!--end::Input-->
+                                            <!--begin::Label-->
+                                            <label class="form-check-label" for="kt_modal_update_role_option_22">
+                                                <div class="fw-bolder text-gray-800">Tidak Aktif</div>
+                                            </label>
+                                            <!--end::Label-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="d-flex flex-column fv-row mb-8">
                                 <!--begin::Label-->
                                 <label class="d-flex align-items-center fs-6 fw-bold required mb-2">

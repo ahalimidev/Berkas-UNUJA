@@ -76,7 +76,41 @@
                                 <a href="{{ route('berkas.show.pdf', ['data' => $one->berkas]) }}" target="blank_"
                                     class="btn btn-sm btn-primary w-200px mt-5">Download Berkas</a>
                             </div>
-
+                            <div class="d-flex flex-column mb-8 fv-row">
+                                <!--begin::Label-->
+                                <label class="d-flex align-items-center fs-7 fw-bold mb-3">
+                                    <span>Standar SPMI</span>
+                                </label>
+                                <!--end::Label-->
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-12 col-lg-6 col-lx-4 col-lxx-3 p-2">
+                                        <div class="form-check form-check-custom form-check-solid">
+                                            <!--begin::Input-->
+                                            <input class="form-check-input me-3" type="radio"
+                                                value="y" id="kt_modal_update_role_option_11" {{ $one->status_spmi == 'y' ? 'checked' : '' }} disabled>
+                                            <!--end::Input-->
+                                            <!--begin::Label-->
+                                            <label class="form-check-label" for="kt_modal_update_role_option_11" disabled>
+                                                <div class="fw-bolder text-gray-800">Ya</div>
+                                            </label>
+                                            <!--end::Label-->
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-6 col-lx-4 col-lxx-3 p-2">
+                                        <div class="form-check form-check-custom form-check-solid">
+                                            <!--begin::Input-->
+                                            <input class="form-check-input me-3" type="radio"
+                                                value="n" id="kt_modal_update_role_option_22" {{ $one->status_spmi == 'n' ? 'checked' : '' }} disabled>
+                                            <!--end::Input-->
+                                            <!--begin::Label-->
+                                            <label class="form-check-label" for="kt_modal_update_role_option_22" disabled>
+                                                <div class="fw-bolder text-gray-800">Tidak</div>
+                                            </label>
+                                            <!--end::Label-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="d-flex flex-column mb-8 fv-row">
                                 <!--begin::Label-->
                                 <label class="d-flex align-items-center fs-7 fw-bold mb-3">

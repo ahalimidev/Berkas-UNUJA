@@ -26,16 +26,18 @@ class DashboardController extends Controller
         $tanggal_akhir =  $req->query('tanggal_akhir');
         $unit = $req->query('unit');
         $status_berkas = $req->query('status_berkas');
+        $status_spmi = $req->query('status_spmi');
         if ($pencarian == 'pencarian') {
             $jenis_berkas = $jenis_berkas == "" ? "" : " AND id_jenis_berkas = '$jenis_berkas' ";
             $status_berkas = $status_berkas == "" ? "" : " AND status_berkas = '$status_berkas' ";
+            $status_spmi = $status_spmi == "" ? "" : " AND status_spmi = '$status_spmi' ";
             if ($tanggal_awal != "" && $tanggal_akhir != "") {
                 $tanggal = " AND date(create_date) BETWEEN '$tanggal_awal' AND '$tanggal_akhir' ";
             } else {
                 $tanggal = "";
             }
             $unit = $unit == "" ? "" : " AND id_unit = '$unit' ";
-            $all = DB::select("SELECT * FROM v_berkas where status = 'active' $jenis_berkas $status_berkas $tanggal $unit");
+            $all = DB::select("SELECT * FROM v_berkas where status = 'active' $jenis_berkas $status_spmi $status_berkas $tanggal $unit");
             if ($req->ajax()) {
                 return DataTables::of($all)
                     ->addIndexColumn()

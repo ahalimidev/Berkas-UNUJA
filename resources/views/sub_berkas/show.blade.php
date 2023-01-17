@@ -50,6 +50,15 @@
                             <div class="d-flex flex-column mb-8 fv-row col-sm-4">
                                 <!--begin::Label-->
                                 <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
+                                    <span>SPMI</span>
+                                </label>
+                                <!--end::Label-->
+                                <p>{{$one->status_spmi == 'y' ? 'Aktif' : 'Tidak Aktif'}}</p>
+
+                            </div>
+                            <div class="d-flex flex-column mb-8 fv-row col-sm-4">
+                                <!--begin::Label-->
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
                                     <span>Jenis Berkas</span>
                                 </label>
                                 <!--end::Label-->

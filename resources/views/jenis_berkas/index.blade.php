@@ -19,7 +19,7 @@
                 </h3>
                 <div class="card-toolbar">
                     <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
-                        <a type="button" class="btn btn-sm btn-primary w-150px"
+                        <a type="button" class="btn btn-sm btn-primary "
                             href="{{ route('jenis_berkas.create') }}">Tambah Jenis Berkas</a>
                     </div>
                 </div>
@@ -53,6 +53,7 @@
                                 </th>
                                 <th class="w-100px text-center">Actions</th>
                                 <th class="w-100px text-center">Jenis Berkas</th>
+                                <th class="w-100px text-center">Standar SPMI</th>
                                 <th class="w-100px text-center">Create By</th>
                                 <th class="w-100px text-center">Create Date</th>
                                 <th class="w-100px text-center">Update By</th>
@@ -227,6 +228,10 @@
                     {
                         data: "nama_jenis_berkas",
                         name: "nama_jenis_berkas"
+                    },
+                    {
+                        data: "status_spmi",
+                        name: "status_spmi"
                     },
                     {
                         data: "create_by",

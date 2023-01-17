@@ -22,7 +22,7 @@
                 <div class="row justify-content-md-center">
                     <div class="align-content-center">
                         <div class="row">
-                            <div class="d-flex flex-column mb-8 fv-row col-sm-4">
+                            <div class="d-flex flex-column mb-8 fv-row col-sm-3">
                                 <!--begin::Label-->
                                 <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
                                     <span>Jenis Berkas</span>
@@ -31,7 +31,7 @@
                                 <p>{{ $one->nama_jenis_berkas }}</p>
 
                             </div>
-                            <div class="d-flex flex-column mb-8 fv-row col-sm-4">
+                            <div class="d-flex flex-column mb-8 fv-row col-sm-3">
                                 <!--begin::Label-->
                                 <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
                                     <span>Unit</span>
@@ -40,13 +40,22 @@
                                 <p>{{ $one->nama_unit }}</p>
 
                             </div>
-                            <div class="d-flex flex-column mb-8 fv-row col-sm-4">
+                            <div class="d-flex flex-column mb-8 fv-row col-sm-3">
                                 <!--begin::Label-->
                                 <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
                                     <span>Struktur</span>
                                 </label>
                                 <!--end::Label-->
                                 <p>{{ $one->nama_struktur }}</p>
+
+                            </div>
+                            <div class="d-flex flex-column mb-8 fv-row col-sm-3">
+                                <!--begin::Label-->
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
+                                    <span>SPMI</span>
+                                </label>
+                                <!--end::Label-->
+                                <p>{{ $one->status_spmi == 'n' ? 'Tidak Aktif' : 'Aktif' }}</p>
 
                             </div>
                         </div>
@@ -73,7 +82,7 @@
                                     <span>Tanggal Upload</span>
                                 </label>
                                 <!--end::Label-->
-                                <p>{{ \Carbon\Carbon::parse($one->create_date)->format('d/m/Y H:i:s') }}</p>
+                                <p>{{ $one->create_date == null ? '' : \Carbon\Carbon::parse($one->create_date)->format('d/m/Y H:i:s') }}</p>
 
                             </div>
                             <div class="d-flex flex-column mb-8 fv-row col-sm-3">
@@ -91,7 +100,7 @@
                                     <span>Tanggal Pembaruan</span>
                                 </label>
                                 <!--end::Label-->
-                                <p>{{ \Carbon\Carbon::parse($one->update_date)->format('d/m/Y H:i:s') }}</p>
+                                <p>{{ $one->update_date == null ? '' : \Carbon\Carbon::parse($one->update_date)->format('d/m/Y H:i:s') }}</p>
 
                             </div>
                             <div class="d-flex flex-column mb-8 fv-row col-sm-3">
@@ -110,8 +119,10 @@
                                 <span>Berkas</span>
                             </label>
                             <!--end::Label-->
-                            <a href="{{ route('download.pdf', ['data' => $one->berkas]) }}" target="blank_"
-                                class="btn btn-sm btn-primary w-200px ">Download Data</a>
+                            <a href="{{ route('download.pdf', ['data' => $one->berkas]) }}"
+                                class="btn btn-sm btn-primary w-200px ">Unduh Berkas</a>
+                            <a href="{{ route('viewers.pdf', ['data' => $one->berkas]) }}" target="blank_"
+                                class="btn btn-sm btn-info mt-2 w-200px ">Lihat Berkas</a>
                         </div>
                     </div>
                 </div>
@@ -127,72 +138,74 @@
                 </div>
                 <div class="card-body">
                     @foreach ($all as $item)
-                    <div class="d-flex flex-column mb-3 fv-row">
-                        <!--begin::Label-->
-
-                        <div class="d-flex flex-column mb-2 fv-row">
+                        <div class="d-flex flex-column mb-3 fv-row">
                             <!--begin::Label-->
-                            <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
-                                <span>Unit</span>
-                            </label>
+
+                            <div class="d-flex flex-column mb-2 fv-row">
+                                <!--begin::Label-->
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
+                                    <span>Unit</span>
+                                </label>
+                                <!--end::Label-->
+                                <p>{{ $item->sub_nama_unit }}</p>
+                            </div>
+
+                            <div class="d-flex flex-column mb-2 fv-row">
+                                <!--begin::Label-->
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
+                                    <span>Nama Berkas</span>
+                                </label>
+                                <!--end::Label-->
+                                <p>{{ $item->nama_sub_berkas }}</p>
+                                <a href="{{ route('sub.download.pdf', ['data' => $item->sub_berkas]) }}" target="blank_"
+                                    class="btn btn-sm btn-primary w-200px ">Unduh Berkas</a>
+                                <a href="{{ route('viewers.pdf', ['data' => $item->sub_berkas]) }}" target="blank_"
+                                    class="btn btn-sm btn-info mt-2 w-200px ">Lihat Berkas</a>
+
+                            </div>
+
+                            <div class="row mt-2">
+                                <div class="d-flex flex-column mb-8 fv-row col-sm-3">
+                                    <!--begin::Label-->
+                                    <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
+                                        <span>Tanggal Upload</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <p>{{ $item->create_date == null ? '' : \Carbon\Carbon::parse($item->create_date)->format('d/m/Y H:i:s') }}
+                                    </p>
+
+                                </div>
+                                <div class="d-flex flex-column mb-8 fv-row col-sm-3">
+                                    <!--begin::Label-->
+                                    <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
+                                        <span>dibuat oleh</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <p>{{ $item->create_by }}</p>
+
+                                </div>
+                                <div class="d-flex flex-column mb-8 fv-row col-sm-3">
+                                    <!--begin::Label-->
+                                    <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
+                                        <span>Tanggal Pembaruan</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <p>{{ $item->update_date == null ? '' : \Carbon\Carbon::parse($item->update_date)->format('d/m/Y H:i:s') }}
+                                    </p>
+
+                                </div>
+                                <div class="d-flex flex-column mb-8 fv-row col-sm-3">
+                                    <!--begin::Label-->
+                                    <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
+                                        <span>perbarui oleh</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <p>{{ $item->update_by }}</p>
+
+                                </div>
+                            </div>
                             <!--end::Label-->
-                            <p>{{ $item->sub_nama_unit }}</p>
                         </div>
-
-                        <div class="d-flex flex-column mb-2 fv-row">
-                            <!--begin::Label-->
-                            <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
-                                <span>Nama Berkas</span>
-                            </label>
-                            <!--end::Label-->
-                            <p>{{ $item->nama_sub_berkas }}</p>
-                            <a href="{{ route('sub.download.pdf', ['data' => $item->sub_berkas]) }}" target="blank_"
-                                class="btn btn-sm btn-primary w-200px ">Download Data</a>
-
-                        </div>
-
-                        <div class="row mt-2">
-                            <div class="d-flex flex-column mb-8 fv-row col-sm-3">
-                                <!--begin::Label-->
-                                <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
-                                    <span>Tanggal Upload</span>
-                                </label>
-                                <!--end::Label-->
-                                <p>{{ \Carbon\Carbon::parse($item->create_date)->format('d/m/Y H:i:s') }}</p>
-
-                            </div>
-                            <div class="d-flex flex-column mb-8 fv-row col-sm-3">
-                                <!--begin::Label-->
-                                <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
-                                    <span>dibuat oleh</span>
-                                </label>
-                                <!--end::Label-->
-                                <p>{{ $item->create_by }}</p>
-
-                            </div>
-                            <div class="d-flex flex-column mb-8 fv-row col-sm-3">
-                                <!--begin::Label-->
-                                <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
-                                    <span>Tanggal Pembaruan</span>
-                                </label>
-                                <!--end::Label-->
-                                <p>{{ \Carbon\Carbon::parse($item->update_date)->format('d/m/Y H:i:s') }}</p>
-
-                            </div>
-                            <div class="d-flex flex-column mb-8 fv-row col-sm-3">
-                                <!--begin::Label-->
-                                <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
-                                    <span>perbarui oleh</span>
-                                </label>
-                                <!--end::Label-->
-                                <p>{{ $item->update_by }}</p>
-
-                            </div>
-                        </div>
-                        <!--end::Label-->
-
-
-                    </div>
                     @endforeach
                 </div>
             </div>

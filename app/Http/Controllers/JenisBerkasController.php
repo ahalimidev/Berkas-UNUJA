@@ -24,6 +24,9 @@ class JenisBerkasController extends Controller
                 ->addColumn('cek', function ($model) {
                     return  $model->id_jenis_berkas;
                 })
+                ->editColumn('status_spmi', function ($model) {
+                    return  $model->status_spmi == 'n' ? 'Tidak' : 'Ya';
+                })
                 ->addColumn('action', function ($model) {
                     return  $model->id_jenis_berkas;
                 })

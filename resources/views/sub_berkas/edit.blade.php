@@ -64,6 +64,15 @@
                                 <div class="d-flex flex-column mb-8 fv-row col-sm-4">
                                     <!--begin::Label-->
                                     <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
+                                        <span>SPMI</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <p id="status_spmi"></p>
+
+                                </div>
+                                <div class="d-flex flex-column mb-8 fv-row col-sm-4">
+                                    <!--begin::Label-->
+                                    <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
                                         <span>Jenis Berkas</span>
                                     </label>
                                     <!--end::Label-->
@@ -101,7 +110,7 @@
                                         <span>Sub Berkas</span>
                                     </label>
                                     <!--end::Label-->
-                                    <input type="file" name="sub_berkas" class="form-control form-control-sm" id="sub_berkas" accept=".pdf" >
+                                    <input type="file" name="sub_berkas" class="form-control form-control-sm" id="sub_berkas" accept="..pdf, .docx, .doc, .zip" >
 
                                     <a href="{{ route('sub_berkas.show.pdf', ['data' => $one->sub_berkas]) }}" target="blank_"
                                         class="btn btn-sm btn-primary w-200px mt-5">Download Sub Berkas</a>
@@ -162,6 +171,7 @@
                 $("#nama_struktur").html(data.nama_struktur);
                 $("#nama_jenis_berkas").html(data.nama_jenis_berkas);
                 $("#keterangan_berkas").html(data.keterangan_berkas);
+                $("#status_spmi").html(data.status_spmi == 'y' ? 'Aktif' : 'Tidak Aktif');
                 var x = '{{ route('berkas.show.pdf', [':berkas']) }}'
                 $("#berkas").attr("href", x.replace(':berkas', data.berkas));
             }).catch(function(error) {

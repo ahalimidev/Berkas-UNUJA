@@ -32,6 +32,15 @@
                         <div class="d-flex flex-column fv-row mb-8">
                             <!--begin::Label-->
                             <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+                                <span>Standar SPMI</span>
+                            </label>
+                            <!--end::Label-->
+                            <input type="text" class="form-control form-control-sm"
+                                value="{{ $one->status_spmi == 'y' ? 'Aktif' : 'Tidak Aktif' }}" disabled />
+                        </div>
+                        <div class="d-flex flex-column fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold mb-2">
                                 <span>Create By</span>
                             </label>
                             <!--end::Label-->

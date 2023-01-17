@@ -59,11 +59,21 @@
                                 <div class="d-flex flex-column mb-8 fv-row col-sm-4">
                                     <!--begin::Label-->
                                     <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
+                                        <span>SPMI</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <p id="status_spmi"></p>
+
+                                </div>
+                                <div class="d-flex flex-column mb-8 fv-row col-sm-4">
+                                    <!--begin::Label-->
+                                    <label class="d-flex align-items-center fs-6 fw-bold mb-2 ">
                                         <span>Jenis Berkas</span>
                                     </label>
                                     <!--end::Label-->
                                     <p id="nama_jenis_berkas"></p>
                                 </div>
+
                                 <div class="d-flex flex-column mb-8 fv-row">
                                     <!--begin::Label-->
                                     <label class="d-flex align-items-center fs-6 fw-bold mb-2">
@@ -96,7 +106,7 @@
                                         <span>Sub Berkas</span>
                                     </label>
                                     <!--end::Label-->
-                                    <input type="file" name="sub_berkas" class="form-control form-control-sm" id="sub_berkas" accept=".pdf" required>
+                                    <input type="file" name="sub_berkas" class="form-control form-control-sm" id="sub_berkas" accept=".pdf, .docx, .doc, .zip" required>
                                 </div>
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-sm btn-primary w-250px" id="btnSubmit">
@@ -149,6 +159,7 @@
                 $("#nama_struktur").html(data.nama_struktur);
                 $("#nama_jenis_berkas").html(data.nama_jenis_berkas);
                 $("#keterangan_berkas").html(data.keterangan_berkas);
+                $("#status_spmi").html(data.status_spmi == 'y' ? 'Aktif' : 'Tidak Aktif');
                 var x = '{{ route('berkas.show.pdf', [':berkas']) }}'
                 $("#berkas").attr("href", x.replace(':berkas', data.berkas));
             }).catch(function(error) {

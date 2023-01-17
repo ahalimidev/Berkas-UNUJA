@@ -30,6 +30,7 @@ Route::middleware(['auth:web'])->group(function () {
     Route::resource('berkas', BerkasController::class);
     Route::post('berkas/edit/all', [BerkasController::class, 'edit_multi'])->name('berkas.edit.all');
     Route::get('berkas/show/{data}', [BerkasController::class, 'show_pdf'])->name('berkas.show.pdf');
+    Route::get('berkas/status/{status}', [BerkasController::class, 'jenis_berkas'])->name('berkas.jenis_berkas');
 
     Route::resource('sub_berkas', SubBerkasController::class);
     Route::post('sub_berkas/edit/all', [SubBerkasController::class, 'edit_multi'])->name('sub_berkas.edit.all');

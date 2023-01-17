@@ -16,7 +16,7 @@
         <div class="card border-2 shadow bg-white rounded p-4 ">
             <div class="card-body">
                 <div class="row mb-6">
-                    <div class="flex-column mb-2 fv-row col-sm-3">
+                    <div class="flex-column mb-5 fv-row col-sm-3">
                         <!--begin::Label-->
                         <label class="d-flex align-items-center fs-6 fw-bold mb-2">
                             <span>Jenis Berkas</span>
@@ -30,7 +30,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="flex-column mb-2 fv-row col-sm-3">
+                    <div class="flex-column mb-5 fv-row col-sm-3">
                         <!--begin::Label-->
                         <label class="d-flex align-items-center fs-6 fw-bold mb-2">
                             <span>Unit</span>
@@ -45,24 +45,20 @@
                         </select>
                     </div>
 
-                    <div class="flex-column mb-2 fv-row col-sm-2">
+                    <div class="flex-column mb-5 fv-row col-sm-3">
                         <!--begin::Label-->
                         <label class="d-flex align-items-center fs-6 fw-bold mb-2">
-                            <span>Tanggal Awal</span>
+                            <span>Standar SPMI</span>
                         </label>
                         <!--end::Label-->
-                        <input type="text" class="form-control form-control-sm" id="tanggal_awal" readonly>
+                        <select class="selectpicker form-control form-control-sm form-select-solid" data-live-search="true"
+                            title="Standar SPMI" id="status_spmi">
+                            <option value="" selected>Semua Standar SPMI</option>
+                            <option value="y">Ya</option>
+                            <option value="n">Tidak</option>
+                        </select>
                     </div>
-                    <div class="flex-column mb-2 fv-row col-sm-2">
-                        <!--begin::Label-->
-                        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
-                            <span>Tanggal Akhir</span>
-                        </label>
-                        <!--end::Label-->
-                        <input type="text" class="form-control form-control-sm" id="tanggal_akhir" readonly>
-                    </div>
-
-                    <div class="flex-column mb-2 fv-row col-sm-2">
+                    <div class="flex-column mb-5 fv-row col-sm-3">
                         <!--begin::Label-->
                         <label class="d-flex align-items-center fs-6 fw-bold mb-2">
                             <span>Status Berkas</span>
@@ -75,18 +71,38 @@
                             <option value="y">Publik</option>
                         </select>
                     </div>
-                    <button type="button" class="btn btn-primary btn-sm m-3 w-100px" id="btn_filter">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-filter" viewBox="0 0 16 16">
-                            <path
-                                d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z">
-                            </path>
-                        </svg>
-                        Filter
-                    </button>
+                    <div class="flex-column mb-5 fv-row col-sm-3">
+                        <!--begin::Label-->
+                        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+                            <span>Tanggal Awal</span>
+                        </label>
+                        <!--end::Label-->
+                        <input type="text" class="form-control form-control-sm" id="tanggal_awal" readonly>
+                    </div>
+                    <div class="flex-column mb-5 fv-row col-sm-3">
+                        <!--begin::Label-->
+                        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+                            <span>Tanggal Akhir</span>
+                        </label>
+                        <!--end::Label-->
+                        <input type="text" class="form-control form-control-sm" id="tanggal_akhir" readonly>
+                    </div>
+
+
+                    <div class="flex-column mb-5 fv-row col-sm-2">
+                        <button type="button" class="btn btn-primary btn-sm  w-100 mt-9" id="btn_filter">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-filter" viewBox="0 0 16 16">
+                                <path
+                                    d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z">
+                                </path>
+                            </svg>
+                            Filter
+                        </button>
+                    </div>
                 </div>
                 <div class="table-responsive">
-                    <table id="example" class="nowrap table" style="width:100%">
+                    <table id="example" class="dt-responsive nowrap table" style="width:100%">
                         <thead>
                             <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
                                 <th class="w-50px">Nomor</th>
@@ -118,6 +134,9 @@
     <script src="{{ asset('assets/plugins/custom/select/bootstrap-select.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/custom/flatpickr/flatpickr.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/custom/flatpickr/id.js') }}"></script>
+    <script src="{{ asset('assets/plugins/custom/datatables/responsive.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/custom/datatables/dataTables.responsive.min.js') }}"></script>
+
     <script>
         var table;
 
@@ -224,9 +243,11 @@
             var id_jenis_berkas = $("#id_jenis_berkas").find("option:selected").val();
             var status_berkas = $("#status_berkas").find("option:selected").val();
             var unit = $("#unit").find("option:selected").val();
+            var spmi = $("#status_spmi").find("option:selected").val();
             var tanggal_awal = $("#tanggal_awal").val();
             var tanggal_akhir = $("#tanggal_akhir").val();
-            var url =`?q=pencarian&id_jenis_berkas=${id_jenis_berkas}&status_berkas=${status_berkas}&unit=${unit}&tanggal_awal=${tanggal_awal}&tanggal_akhir=${tanggal_akhir}`;
+
+            var url =`?q=pencarian&id_jenis_berkas=${id_jenis_berkas}&status_spmi=${spmi}&status_berkas=${status_berkas}&unit=${unit}&tanggal_awal=${tanggal_awal}&tanggal_akhir=${tanggal_akhir}`;
             var url_x = "{{ url('/') }}" + url;
             table.ajax.url(url_x);
             table.ajax.reload();

@@ -57,9 +57,9 @@ class SubBerkasController extends Controller
     {
         $save = $request->all();
         $validator = Validator::make($save, [
-            'sub_berkas' => 'mimes:pdf',
+            'sub_berkas' => 'mimes:pdf,docx,doc,zip',
         ],[
-            'mimes' => 'File Harus PDF'
+            'mimes' => 'File Harus pdf, docx, doc atau zip'
         ]);
         if ($validator->fails()) {
             return Redirect()->route('sub_berkas.create')
@@ -117,10 +117,11 @@ class SubBerkasController extends Controller
     {
         $save = $request->all();
         $validator = Validator::make($save, [
-            'sub_berkas' => 'mimes:pdf',
+            'sub_berkas' => 'mimes:pdf,docx,doc,zip',
         ],[
-            'mimes' => 'File Harus PDF'
+            'mimes' => 'File Harus pdf, docx, doc atau zip'
         ]);
+
         if ($validator->fails()) {
             return Redirect()->route('sub_berkas.edit',$id)
                 ->withErrors($validator)

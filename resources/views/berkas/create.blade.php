@@ -24,6 +24,41 @@
                     <div class="row justify-content-md-center">
                         <div class="align-content-center">
                             <div class="row">
+                                <div class="d-flex flex-column mb-8 fv-row">
+                                    <!--begin::Label-->
+                                    <label class="d-flex align-items-center fs-7 fw-bold mb-3 required">
+                                        <span>Standar SPMI</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-6 col-lx-4 col-lxx-3 p-2">
+                                            <div class="form-check form-check-custom form-check-solid">
+                                                <!--begin::Input-->
+                                                <input class="form-check-input me-3" name="status_spmi" type="radio"
+                                                    value="y" id="kt_modal_update_role_option_11" checked required>
+                                                <!--end::Input-->
+                                                <!--begin::Label-->
+                                                <label class="form-check-label" for="kt_modal_update_role_option_11">
+                                                    <div class="fw-bolder text-gray-800">Ya</div>
+                                                </label>
+                                                <!--end::Label-->
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 col-md-12 col-lg-6 col-lx-4 col-lxx-3 p-2">
+                                            <div class="form-check form-check-custom form-check-solid">
+                                                <!--begin::Input-->
+                                                <input class="form-check-input me-3" name="status_spmi" type="radio"
+                                                    value="n" id="kt_modal_update_role_option_22" required>
+                                                <!--end::Input-->
+                                                <!--begin::Label-->
+                                                <label class="form-check-label" for="kt_modal_update_role_option_22">
+                                                    <div class="fw-bolder text-gray-800">Tidak</div>
+                                                </label>
+                                                <!--end::Label-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="flex-column mb-8 fv-row">
                                     <!--begin::Label-->
                                     <label class="d-flex align-items-center fs-6 fw-bold mb-2 required">
@@ -33,10 +68,7 @@
                                     <select class="selectpicker form-control form-control-sm form-select-solid"
                                         data-live-search="true" title="Jenis Berkas" id="id_jenis_berkas"
                                         name="id_jenis_berkas" required>
-                                        @foreach ($jenis_berkas as $item)
-                                            <option value="{{ $item->id_jenis_berkas }}">{{ $item->nama_jenis_berkas }}
-                                            </option>
-                                        @endforeach
+
                                     </select>
 
                                 </div>
@@ -55,7 +87,8 @@
                                         <span>Keterangan Berkas</span>
                                     </label>
                                     <!--end::Label-->
-                                    <input type="text" name="keterangan_berkas" class="form-control form-control-sm " required/>
+                                    <input type="text" name="keterangan_berkas" class="form-control form-control-sm "
+                                        required />
                                 </div>
                                 <div class="d-flex flex-column mb-8 fv-row">
                                     <!--begin::Label-->
@@ -64,7 +97,7 @@
                                     </label>
                                     <!--end::Label-->
                                     <input type="file" name="berkas" class="form-control form-control-sm" id="berkas"
-                                        accept=".pdf" required>
+                                        accept="..pdf, .docx, .doc, .zip" required>
                                 </div>
 
                                 <div class="d-flex flex-column mb-8 fv-row">
@@ -125,6 +158,7 @@
     <script src="{{ asset('assets/plugins/custom/select/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/custom/select/bootstrap-select.min.js') }}"></script>
     <script>
+        jenis_berkas("y")
         window.onbeforeunload = function() {
             $("button[type=submit]").prop("disabled", "disabled");
         }
@@ -133,5 +167,35 @@
                 $(this).remove();
             });
         }, 2000);
+        $('input[name="status_spmi"]').on('change', function() {
+            var val = $("input[name='status_spmi']:checked").val();
+            jenis_berkas(val)
+        });
+
+        function jenis_berkas(status) {
+            const x = new Promise((resolve, reject) => {
+                var url = '{{ route('berkas.jenis_berkas', [':status']) }}';
+                $.ajax({
+                    url: url.replace(':status', status),
+                    dataType: 'json',
+                    success: function(data) {
+                        resolve(data)
+                    },
+                    error: function(error) {
+                        reject(error)
+                    },
+                });
+            });
+            x.then((data) => {
+                $("#id_jenis_berkas").empty();
+                $.each(data, function(index, item) {
+                    $("#id_jenis_berkas").append("<option value='" + item.id_jenis_berkas +"'>" + item.nama_jenis_berkas +"</option>");
+                });
+                $('.selectpicker').selectpicker('refresh');
+                $('.selectpicker').selectpicker('render');
+            }).catch(function(error) {
+                console.log(error);
+            });
+        }
     </script>
 @endsection

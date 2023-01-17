@@ -13,6 +13,7 @@ class JenisBerkas extends Model
     protected $fillable = [
         "id_jenis_berkas",
         "nama_jenis_berkas",
+        "status_spmi",
         "create_by",
         "create_date",
         "update_by",

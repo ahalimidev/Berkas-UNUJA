@@ -19,7 +19,7 @@
                 </h3>
                 <div class="card-toolbar">
                     <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
-                        <a type="button" class="btn btn-sm btn-primary w-150px"
+                        <a type="button" class="btn btn-sm btn-primary "
                             href="{{ route('sub_berkas.create') }}">Tambah Sub Berkas</a>
                     </div>
                 </div>
